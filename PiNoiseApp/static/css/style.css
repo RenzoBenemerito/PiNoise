@@ -1,0 +1,147 @@
+html,body{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+body{
+    position: relative;
+}
+.navbar{
+    height: 5%;
+    transition: all 0.5s ease-in-out;
+    border: none;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+    backface-visibility: hidden;
+}
+
+#landing{
+    width: inherit;
+    height: 100%;
+    background-image: url(".././pic/bg.png");
+    background-size: 100% 100%;
+    padding: 100px 50px;
+}
+.navbar-custom{
+    background: transparent;
+    font-size: 1.5em;
+}
+.landText{  
+    color: white;
+    margin-top: 15%;
+    font-family: impact;
+    font-size: 4.5vw;
+}
+.landText1{  
+    color: white;
+    margin-top: 5%;
+    font-family: impact;
+    font-size: 5vw;
+}
+#menu{
+    float: left;
+    font-size: 1em;
+}
+.btn-modified{
+    width: 30%;
+    margin: 0 5%;
+    border: 0;
+    border-radius: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+#about{
+    color: white;
+    width: 100%;
+    height: 95.5%;
+    background-size: 100% 100%;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.7) 100%), url(".././pic/feature.jpg");
+    overflow: hidden;
+}
+.nav-scroll{
+    background-color: white;
+    height: 5.5%;
+}
+.nav>li>a{
+    transition: all 0.5s ease-in-out;
+}
+.nav-scroll-a{
+    color: black !important;
+    font-size: 1.3em;
+}
+.nav-scroll-a:hover{
+    color: blue !important;
+    font-size: 1.3em;
+    background: transparent;
+}
+.bgBlack{
+    color: black !important;
+    background-color: black !important;
+}
+.collapsing, .in {
+    background-color: #f7f7f7;
+}
+.trans{
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 40%;
+    padding: 5%;
+}
+#features{
+    margin: 0;
+    background-image: url(".././pic/feature.jpg");
+    background-size: 100% 100%;
+    color: white;
+}
+.bgWell{
+    height: 424px;
+    text-align: center;
+}
+.pics{
+    width: 100%;
+    height: 20%;
+}
+.log-in-pane{
+    position: fixed;
+    right: 0;
+    z-index: 10000;
+    height: 100%;
+    width: 0;
+    background-color: rgba(33, 150, 243,.4);
+    transition: all 0.3s ease-in-out;
+    color: white;
+}
+.container-login{
+    padding: 10%;
+}
+input{
+    color: black;
+}
+.lbllogin{
+    font-size: 1.5em;
+}
+.close1{
+    position: absolute;
+    left: 2%;
+    top: 2%;
+    padding: 5%;
+    color: red !important;
+    font-size: 2em;
+    opacity: 0.7;
+}
+.no-gap{
+    padding: 0;
+    margin: 0;
+}
+.item{
+    height: 424px;
+    width: 100%;
+}
+.pics{
+    min-height: 100%;
+    width: 100%;
+}
+#FAQ{
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.7) 100%), url(".././pic/faq.png");
+    background-size: 100% 100%;
+    color: white;
+    height: 95.5%;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{%  static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{%  static 'css/styleDash.css' %}">
+    <link rel="stylesheet" href="{%  static 'fonts/glyphicons-halflings-regular.svg' %}">
+    <script src="{%  static 'js/jquery.js' %}"></script>
+    <script src="{%  static 'js/bootstrap.min.js' %}"></script>
+    <script src="{%  static 'js/dash.js' %}"></script>
+    <title>Renzo</title>
+</head>
+
+<body>
+    <div class="profilePic">
+        <img src="{%  static 'pic/cat.gif' %}" alt="" class="imgProf">
+        <h3>{{user}} <br> 20 <br> Marikina City</h3>
+    </div>
+    <div class="nav">
+        <ul class="navList">
+            <li><a href="/pinoise/dashboard">Home</a></li>
+            <li><a href="/pinoise/myIdeas">My Ideas</a></li>
+            <li><a href="/pinoise/settings">Settings</a></li>
+            <li><a href="/pinoise/dashboard/logout">Log-Out</a></li>
+        </ul>
+    </div>
+ {% block content %}
+
+ {% endblock %}
+</body>
+</html>

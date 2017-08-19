@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{%  static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{%  static 'css/style.css' %}">
+    <link rel="stylesheet" href="{%  static 'fonts/glyphicons-halflings-regular.svg' %}">
+    <script src="{%  static 'js/jquery.js' %}"></script>
+    <script src="{%  static 'js/bootstrap.min.js' %}"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                    aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+                <a class="navbar-brand" href="#">Brand</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#FAQ">FAQ</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <div class="log-in-pane">   
+        <div class="container-login">
+            <button class="close close1">X</button>
+            <h1> Log-In </h1>
+            <br>
+            <form action='{% url 'login' %}' method='POST'>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username" class="lbllogin">Username</label>
+                    <input type="text" class="form-control" name='emailLog' required>
+                    <br>
+                    <br>
+                    <br>
+                    <label for="password" class="lbllogin">Password</label>
+                    <input type="password" class="form-control" name='passLog' required>
+                    <br>
+                    <br>
+                    <center>
+                        <button type='submit' class="btn btn-danger">Log-In</button>
+                    </center>       
+                </div>           
+            </form>
+        </div>     
+    </div>
+    <div class="container-fluid" id="landing">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="landText">Are you tired of all the 
+                <br>problems in the <br>Philippines?</h1>
+            </div>
+            <div class="col-md-6">
+                <h1 class="landText" style="float:right">Have an idea on 
+                <br>how to solve them?</h1>
+            </div>
+        </div>
+        <div class="row">
+            <center><h1 class="landText1">Sign-up now for everyone to know.</h1></center>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <center>
+                    <button type="button" class="btn btn-modified" data-toggle="modal" data-target="#signUpModal">Sign-Up</button>
+                </center>        
+            </div>
+            <div class="col-md-6">
+                <center>
+                    <button class="btn btn-modified" id="login">Log-In</button>
+                </center>        
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="about">
+        <div class="row">
+            <center>
+                <h1>About</h1>
+                <br>
+                <div class="trans">
+                    <p><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure eaque, error nemo sapiente. Inventore, tenetur vel accusamus, nostrum eligendi illo, rem sed reprehenderit alias molestiae aut error voluptatibus rerum accusantium!</span>
+                    <span>Delectus odio labore nobis maxime fuga veritatis ut atque natus. Labore eos nobis ea pariatur soluta illo, officiis, veritatis est maiores quam distinctio laborum cumque nihil, repellat iste suscipit velit.</span>
+                    <span>Cupiditate voluptatem quas beatae dolorum, expedita id molestiae atque placeat totam praesentium ipsum in explicabo eos tempore perferendis quasi labore omnis facilis maxime quod fugit provident harum delectus vero sunt.</span>
+                    <span>Pariatur harum impedit, necessitatibus corrupti praesentium. Eos dolores quis id, nisi, mollitia, rerum deserunt atque molestiae non, ad autem magni in nihil laboriosam quae ea. Iusto unde nulla facere amet.</span>
+                    <span>Sed saepe beatae, omnis atque iusto optio deserunt quasi id, rerum, distinctio impedit laboriosam culpa officiis deleniti ratione aperiam modi eaque esse minima fugiat nesciunt ipsa ex? Ut, ab, odit!</span>
+                    <span>Expedita aliquam iste accusantium molestiae, temporibus, nemo cupiditate ab esse doloremque aut aliquid in ducimus perferendis recusandae inventore at veritatis laboriosam molestias vel fuga ad facere saepe. Nisi, cupiditate! Ullam!</span>
+                    <span>Voluptas totam earum et architecto, eligendi molestiae! Quibusdam ab, iusto dolores mollitia excepturi non molestiae consectetur qui nisi voluptas, repellat ratione sequi blanditiis, omnis dolorum ea, quis. Veritatis, hic voluptate.</span>
+                    <span>Accusamus harum saepe veritatis hic eligendi similique ab ipsa iure, cumque voluptatem fugiat a reprehenderit vero voluptas suscipit, soluta nemo cupiditate nostrum rem. Dolore accusantium porro, quaerat assumenda molestias et!</span>
+                    <span>Aut, quos fuga neque cumque! Possimus cumque fuga odio expedita iste ratione dolorem explicabo, nam non veniam aperiam sunt delectus est similique aliquid magnam natus quidem ut eos vitae illum.</span>
+                    <span>Illo dolor assumenda, nihil porro excepturi fuga perspiciatis? Culpa nulla, voluptas saepe repudiandae quis, quia ex id rerum a recusandae, illo. Magnam minus totam autem doloremque laboriosam, sequi tenetur voluptatem.</span></p>
+                </div>
+            </center>
+        </div>
+    </div>
+    <div class="container-fluid" id="features">
+        <div class="row">
+            <center>
+                <h1>Features</h1>
+            </center>
+        </div>
+        <div class="row">
+            <div class="col-md-4 no-gap">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                    <img src="{%  static 'pic/p1.jpg' %}" class="pics" alt="...">
+                    <div class="carousel-caption">
+                        
+                    </div>
+                    </div>
+                    <div class="item">
+                    <img src="{%  static 'pic/p2.jpg' %}" class="pics" alt="...">
+                    <div class="carousel-caption">
+                        
+                    </div>
+                    </div>
+                    
+                    <div class="item">
+                    <img src="{%  static 'pic//p3.jpg' %}" class="pics" alt="...">
+                    <div class="carousel-caption">
+                    
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+                </div>
+            </div>
+            <div class="col-md-8 bgWell no-gap" style="background-color: rgba(40, 53, 147,0.5);">
+                <br>
+                <h2>Lorem</h2>
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque ducimus tempore ipsam explicabo. Earum nemo quia repellat repellendus libero rem, reiciendis. Quae maxime facilis ab asperiores suscipit soluta sit laborum.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 no-gap bgWell" style="background-color:rgba(198, 40, 40,.5)">
+                <br>
+                <h2>Lorem</h2>
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque ducimus tempore ipsam explicabo. Earum nemo quia repellat repellendus libero rem, reiciendis. Quae maxime facilis ab asperiores suscipit soluta sit laborum.</p>
+            </div>
+            <div class="col-md-6 no-gap"><img src="{%  static 'pic/f2.jpg' %}" alt="" class="item"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 no-gap"><img src="{%  static 'pic/f3.png' %}" alt="" class="item"></div>
+            <div class="col-md-8 bgWell no-gap" style="background-color: rgba(249, 168, 37,0.5)">
+                <br>
+                <h2>Lorem</h2>
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque ducimus tempore ipsam explicabo. Earum nemo quia repellat repellendus libero rem, reiciendis. Quae maxime facilis ab asperiores suscipit soluta sit laborum.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="FAQ">
+        <center>
+            <h1>FAQ</h1>
+            <div class="trans">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque iusto quisquam architecto aliquid tempora autem, totam consequatur sequi laudantium veritatis culpa debitis facilis sunt qui, eaque asperiores eius necessitatibus non.</p>
+            </div>
+        </center>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="signUpModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Sign-Up</h4>
+            </div>
+            <div class="modal-body">
+                <form action='{% url 'index' %}' method='POST'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">First Name</label>
+                        <input type="text" class="form-control" name="fName" placeholder="first name" required>
+                        <label for="exampleInputEmail1">Latest Name</label>
+                        <input type="text" class="form-control" name="lName" placeholder="last name" required>
+                        <label for="exampleInputEmail1">Middle Name</label>
+                        <input type="text" class="form-control" name="mName" placeholder="middle name" required>
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" name="email" placeholder="Email" required>
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" name="pass" placeholder="Password" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+            
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</body>
+<script src="{%  static 'js/jscript.js' %}"></script>
+
+
+</html>

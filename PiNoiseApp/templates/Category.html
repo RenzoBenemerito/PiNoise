@@ -1,0 +1,35 @@
+{% extends "header.html" %}
+{% block content %}
+<br>
+<div class="container-fluid pane">
+<h1 id="category">{{problem}}</h1>
+<h3>Have an idea?</h3>
+<form action='addPost' method="POST" id="post">
+    {% csrf_token %}
+    <label for="title">Title</label>
+    <br>
+    <input type="text" name='title'>
+    <br>
+    <textarea name="ideation" id="ideation"></textarea>
+    <div class="bCont">
+        <button class="btn btn-primary" type='submit'>Add Idea</button>
+    </div>
+</form>
+
+{% for post in posts %}
+<div class="post">
+    <div class="vote">
+        <i class="fa fa-thumbs-up up" aria-hidden="true"></i>
+        <br>
+        <i class="fa fa-thumbs-down down" aria-hidden="true"></i>
+    </div>
+    <div class="ideaPane">
+        <h2>{{post.title}}</h2>
+        <hr>
+        <p><span>{{post.description}}</span></p>
+    </div>           
+</div>
+{% endfor %}
+
+</div>
+{% endblock %}

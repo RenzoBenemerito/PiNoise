@@ -1,0 +1,19 @@
+{% extends "header.html" %}
+{% block content %}
+<body>
+    <h3>Change Password</h3>
+    <form action='{% url 'passreset' %}' method='POST'>
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Old Password</label>
+            <input type="password" class="form-control" name="pass" placeholder="Password" required>
+            <label>New Password</label>
+            <input type="password" class="form-control" name="pass1" placeholder="Password" required>
+            <label>New Password</label>
+            <input type="password" class="form-control" name="pass2" placeholder="Password" required>
+        </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
