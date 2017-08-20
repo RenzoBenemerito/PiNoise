@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from . models import Users,Posts,Category
+from . models import Users,Posts,Category,Votes
 from django import forms
 from django.http import HttpRequest
 from django.http import HttpResponse
-
+from django.contrib import messages
 
 def index(request,methods=['POST']):
     if(request.method == 'POST'):
@@ -47,8 +47,8 @@ def logout(request):
 
 def problemPage(request,problem):
     posts = Posts.objects.filter(category=problem)
-    print (posts)
-    return render(request,'Category.html',{'problem':problem,'posts':posts})
+    vote = Votes.objects.filter(user = request.session['id'])
+    return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id']})
 
 def postIdea(request,problem,methods=['POST']):
     if(request.method == 'POST'):
@@ -76,7 +76,6 @@ def deletePost(request,methods=['GET']):
 def settings(request):
     return render(request, 'settings.html')
 
-
 def passreset(request,methods=['POST']):
     user = Users.objects.get(id = request.session['id'])
     oldPass = request.POST['pass']
@@ -86,5 +85,28 @@ def passreset(request,methods=['POST']):
     if oldPass == user.password and newPass == newPass2:
         user.password = newPass
         user.save()
+    
+    return redirect('./')
+
+def vote(request,methods=['GET']):
+    title = request.GET['title']
+    kind = request.GET['kind']
+    author = request.GET['author']
+    post = Posts.objects.get(title = title,author = author)
+    try:
+        check = Votes.objects.get(user = request.session['id'], post = post.id)
+    except Votes.DoesNotExist:
+        check = None
+    if check is None:
+        voter = Votes(user = Users.objects.get(id = request.session['id']),post = post,vote = kind)
+        voter.save();
+        if kind == 'upvote':
+            post.like = post.like + 1
+        elif kind == 'downvote':
+            post.dislike = post.dislike + 1
+        post.rating = post.like - post.dislike
+        post.save()
+    else:
+        print('failed')
     
     return redirect('./')

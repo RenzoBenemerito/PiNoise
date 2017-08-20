@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'pPage/(?P<problem>.*)/$',views.problemPage,name='problemPage'),
     url(r'^(?P<problem>.*)/addPost$',views.postIdea,name='postIdea'),
     url(r'^passReset$',views.passreset,name='passreset'),
+    url(r'^.*/vote$',views.vote,name='vote'),
     ]

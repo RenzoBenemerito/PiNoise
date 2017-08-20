@@ -1,0 +1,22 @@
+{% extends "header.html" %}
+{% block content %}
+<body>
+    <div class="container-fluid pane">
+        {% for post in posts %}
+        <div class="post">
+            <div class="vote">
+                <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
+                <br>
+                <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
+            </div>
+            <div class="ideaPane">
+                {% load static %}
+                <h2>{{post.title}} <button class="delete"></button></h2>
+                <h4>{{post.category}}</h4>
+                <hr>
+                <p><span>{{post.description}}</span></p>
+            </div>           
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

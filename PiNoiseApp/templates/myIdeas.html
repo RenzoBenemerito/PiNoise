@@ -4,13 +4,11 @@
     {% for post in posts %}
     <div class="post">
         <div class="vote">
-            <i class="fa fa-thumbs-up up" aria-hidden="true"></i>
-            <br>
-            <i class="fa fa-thumbs-down down" aria-hidden="true"></i>
+            <h2>{{post.rating}}</h2>
         </div>
         <div class="ideaPane">
             {% load static %}
-            <h2>{{post.title}} <button id="delete"></button></h2>
+            <h2>{{post.title}} <button class="delete"></button></h2>
             <h4>{{post.category}}</h4>
             <hr>
             <p><span>{{post.description}}</span></p>
