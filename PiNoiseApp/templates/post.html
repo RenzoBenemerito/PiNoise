@@ -2,21 +2,16 @@
 {% block content %}
 <body>
     <div class="container-fluid pane">
-        {% for post in posts %}
-        <div class="post">
-            <div class="vote">
-                <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
-                <br>
-                <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
-            </div>
-            <div class="ideaPane">
-                {% load static %}
-                <h2>{{post.title}} <button class="delete"></button></h2>
-                <h4>{{post.category}}</h4>
-                <hr>
-                <p><span>{{post.description}}</span></p>
-            </div>           
+        <div class="titlePane">
+            <h2>{{post.title}}</h2>
+            <h4>by {{post.author}}</h4>
+            <h6>date posted: {{post.date_posted}}</h6>
+        </div>
+        <div class="postPane">
+            {{post.description}}
+        </div>
+        <div class="commentPane">
+
         </div>
     </div>
-{% endfor %}
 {% endblock %}

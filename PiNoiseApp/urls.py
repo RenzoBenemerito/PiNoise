@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^dashboard/logout$',views.logout,name='logout'),
     url(r'pPage/(?P<problem>.*)/$',views.problemPage,name='problemPage'),
     url(r'^(?P<problem>.*)/addPost$',views.postIdea,name='postIdea'),
+    url(r'^.*/(?P<user>.*)/(?P<title>.*)/post_page$',views.postPage,name='postPage'),
     url(r'^passReset$',views.passreset,name='passreset'),
     url(r'^.*/vote$',views.vote,name='vote'),
     ]

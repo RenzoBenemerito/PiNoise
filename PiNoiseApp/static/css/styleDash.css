@@ -78,6 +78,7 @@ body{
     margin-left: 5%;
     color: black;
     padding: 0.5%;
+    cursor: pointer;
 }
 .ideaPane:hover{
     border-bottom: solid 5px orange;

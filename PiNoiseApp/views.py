@@ -32,7 +32,7 @@ def login(request,methods=['POST']):
         passLog = request.POST['passLog']
         
         log = Users.objects.get(email = email, password = passLog);
-        if(log):
+        if log:
             request.session['id'] = log.id
             return redirect('/pinoise/dashboard')
     else:
@@ -110,3 +110,8 @@ def vote(request,methods=['GET']):
         print('failed')
     
     return redirect('./')
+
+def postPage(request,user,title):
+    post = Posts.objects.get(title = title,author = user)
+
+    return render(request, 'post.html',{'post':post})
