@@ -122,3 +122,17 @@ input{
 .by,.auth{
     display: inline;
 }
+#search{
+    width: 100%;
+    display: inline-block;
+}
+.btn-group{
+    float: right;
+    display: inline-block;
+}
+#searchForm{
+    display: inline-block;
+}
+a,a:hover{
+    text-decoration: none;
+}

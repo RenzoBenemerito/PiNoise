@@ -115,3 +115,27 @@ def postPage(request,user,title):
     post = Posts.objects.get(title = title,author = user)
 
     return render(request, 'post.html',{'post':post})
+
+def search(request,problem,methods=['GET']):
+    if(request.method == 'GET'):
+        title = request.GET['search']
+        category = request.GET['category']
+        post = Posts.objects.filter(title__istartswith = title,category = category)
+        vote = Votes.objects.filter(user = request.session['id'])
+        return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.session['id']})
+
+def sort(request,problem,methods=['GET']):
+    if(request.method == 'GET'):
+        category = request.GET['category']
+        sort = request.GET['sortBy']
+        if sort == 'Name':
+            post = Posts.objects.filter(category = category).order_by('title')
+            vote = Votes.objects.filter(user = request.session['id'])
+        elif sort == 'Top Rated':
+            post = Posts.objects.filter(category = category).order_by('rating')
+            vote = Votes.objects.filter(user = request.session['id'])
+        elif sort == 'Date':
+            post = Posts.objects.filter(category = category).order_by('date_posted')
+            vote = Votes.objects.filter(user = request.session['id'])
+
+        return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.session['id']})

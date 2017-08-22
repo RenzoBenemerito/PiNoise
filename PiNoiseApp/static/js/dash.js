@@ -8,6 +8,32 @@ $(document).ready(function(){
       return true;
     });
 
+    $('#searchForm').submit(function(){
+        $('<input />').attr('type', 'hidden')
+          .attr('name', "category")
+          .attr('value', categ)
+          .appendTo('#searchForm');
+      return true;
+    });
+
+    $('#sortForm').submit(function(){
+        var val = $("input[type=submit][clicked=true]").val();
+        $('<input />').attr('type', 'hidden')
+          .attr('name', "category")
+          .attr('value', categ)
+          .appendTo('#sortForm');
+         $('<input />').attr('type', 'hidden')
+          .attr('name', "sortBy")
+          .attr('value', val)
+          .appendTo('#sortForm');
+      return true;
+    });
+
+    $("form input[type=submit]").click(function() {
+        $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+        $(this).attr("clicked", "true");
+    });
+
     $('.delete').click(function(event){
         event.preventDefault();
         var choice = confirm();
