@@ -46,7 +46,7 @@ def logout(request):
     return render(request,'index.html')
 
 def problemPage(request,problem):
-    posts = Posts.objects.filter(category=problem,votes__post__isnull=True).values()
+    posts = Posts.objects.select_related('Votes').filter(category=problem).values()
     vote = Votes.objects.filter(user = request.session['id'])
     print(posts)
     return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id']})
