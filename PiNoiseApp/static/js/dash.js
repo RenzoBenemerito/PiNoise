@@ -72,5 +72,19 @@ $(document).ready(function(){
         });
     });
 
+    $('#update').submit(function(){
+        var category = $('#category').text();
+        $('<input />').attr('type', 'hidden')
+          .attr('name', "category")
+          .attr('value', category)
+          .appendTo('#update');
+      return true;
+    });
+
+    $('#updatePost').click(function(){
+        $('#updatePost').css('display','none');
+        $('.updatePane').removeAttr('style');
+        $('.updatePane').css('display','block');
+    });
 
 });
