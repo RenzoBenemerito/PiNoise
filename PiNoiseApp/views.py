@@ -46,9 +46,9 @@ def logout(request):
     return render(request,'index.html')
 
 def problemPage(request,problem):
+    posts = Posts.objects.select_related('Votes').filter(category=problem).values()
     vote = Votes.objects.filter(user = request.session['id'])
-    posts = Posts.objects.filter(id__post=True)
-    print(posts.vote)
+    print(posts)
     return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id']})
 
 def postIdea(request,problem,methods=['POST']):
@@ -63,6 +63,21 @@ def postIdea(request,problem,methods=['POST']):
         post.save()
     
         return redirect('./')
+
+def updateIdea(request,titleBefore,methods=['POST']):
+    if(request.method == 'POST'):
+        title = request.POST['title']
+        description = request.POST['ideation']
+        category = request.POST['category']
+        category1 = Category.objects.get(category=category)
+        poster = Users.objects.get(id=request.session['id'])
+        post = Posts.objects.get(author_id = poster,title = titleBefore,category_id = category1,category = category1.category)
+        post.title = title
+        post.description = description
+        post.save()
+        url = '../'+title +'/post_page'
+        print(url)
+        return redirect(url)
 
 def idea(request):
     posts = Posts.objects.filter(author_id=request.session['id'])
@@ -114,8 +129,7 @@ def vote(request,methods=['GET']):
 
 def postPage(request,user,title):
     post = Posts.objects.get(title = title,author = user)
-
-    return render(request, 'post.html',{'post':post})
+    return render(request, 'post.html',{'post':post,'userLog':request.session['id']})
 
 def search(request,problem,methods=['GET']):
     if(request.method == 'GET'):
@@ -133,10 +147,10 @@ def sort(request,problem,methods=['GET']):
             post = Posts.objects.filter(category = category).order_by('title')
             vote = Votes.objects.filter(user = request.session['id'])
         elif sort == 'Top Rated':
-            post = Posts.objects.filter(category = category).order_by('rating')
+            post = Posts.objects.filter(category = category).order_by('-rating')
             vote = Votes.objects.filter(user = request.session['id'])
         elif sort == 'Date':
-            post = Posts.objects.filter(category = category).order_by('date_posted')
+            post = Posts.objects.filter(category = category).order_by('-date_posted')
             vote = Votes.objects.filter(user = request.session['id'])
 
         return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.session['id']})

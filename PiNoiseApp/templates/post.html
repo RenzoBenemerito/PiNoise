@@ -5,10 +5,30 @@
         <div class="titlePane">
             <h2>{{post.title}}</h2>
             <h4>by {{post.author}}</h4>
+            <h5>Category: <span id='category'>{{post.category}}</span></h5>
             <h6>date posted: {{post.date_posted}}</h6>
         </div>
         <div class="postPane">
             {{post.description}}
+        </div>
+        <br>
+        {% if post.author_id.id == userLog %}
+            <button class='btn btn-primary' id='updatePost'>Update Post</button>
+            <br>
+            <br>
+        {% endif %}
+        <div class="updatePane" style='display:none'>
+            <form action='updatePost' method="POST" id="update">
+                {% csrf_token %}
+                <label for="title">Title</label>
+                <br>
+                <input type="text" name='title'>
+                <br>
+                <textarea name="ideation" id="ideation"></textarea>
+                <div class="bCont">
+                    <button class="btn btn-primary" type='submit'>Update Idea</button>
+                </div>
+            </form>
         </div>
         <div class="commentPane">
 

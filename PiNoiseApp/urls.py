@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^.*/(?P<problem>.*)/search$',views.search,name='search'),
     url(r'^.*/(?P<problem>.*)/sort$',views.sort,name='sort'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/post_page$',views.postPage,name='postPage'),
+    url(r'^.*/(?P<titleBefore>.*)/updatePost$',views.updateIdea,name='updateIdea'),
     url(r'^passReset$',views.passreset,name='passreset'),
     url(r'^.*/vote$',views.vote,name='vote'),
     ]
