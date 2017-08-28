@@ -36,3 +36,9 @@ class Votes(models.Model):
 
     def __int__(self):
         return self.user.id
+
+class ReplyPost(models.Model):
+    post = models.ForeignKey(Posts,on_delete=models.CASCADE)
+    author = models.CharField(max_length=45)
+    reply = models.CharField(max_length=1000)
+    
