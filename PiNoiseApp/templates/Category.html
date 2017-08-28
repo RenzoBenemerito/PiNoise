@@ -41,24 +41,16 @@
 {% for post in posts %}
 <div class="post">
     <div class="vote">
-        {% if votes %}
-        {% for vote in votes %}
-        {% if vote.user.id == userLog and post.id == vote.post.id %}
-        {% if vote.vote == 'upvote' %}
-        <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote' style='color:blue'></span>
-        <h4>{{post.rating}}</h4>
-        <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
-        {% elif vote.vote == 'downvote' %}
-        <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
-        <h4>{{post.rating}}</h4>
-        <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote' style='color:red'></span>
-        {% endif %}
-        {% elif vote.user.id == userLog and post.id != vote.post.id %}
-        <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
-        <h4>{{post.rating}}</h4>
-        <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
-        {% endif %}
-        {% endfor %}
+        {% if post.user_id == userLog %}
+            {% if post.vote == 'upvote' %}
+                <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote' style='color:blue'></span>
+                <h4>{{post.rating}}</h4>
+                <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
+            {% elif post.vote == 'downvote' %}
+                <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
+                <h4>{{post.rating}}</h4>
+                <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote' style='color:red'></span>
+            {% endif %}
         {% else %}
         <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
         <h4>{{post.rating}}</h4>

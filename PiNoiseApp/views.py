@@ -46,9 +46,10 @@ def logout(request):
     return render(request,'index.html')
 
 def problemPage(request,problem):
-    posts = Posts.objects.select_related('Votes').filter(category=problem).values()
+    posts = Posts.objects.raw('SELECT * FROM pinoiseapp_posts left join pinoiseapp_votes ON pinoiseapp_posts.id=pinoiseapp_votes.post_id WHERE category="{}";'.format(problem))
     vote = Votes.objects.filter(user = request.session['id'])
-    print(posts)
+    for p in posts:
+        print(p.user_id)
     return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id']})
 
 def postIdea(request,problem,methods=['POST']):
@@ -123,8 +124,16 @@ def vote(request,methods=['GET']):
         post.rating = post.like - post.dislike
         post.save()
     else:
-        print('failed')
-    
+        if  check.vote == kind:
+            check.delete() 
+            if  kind == 'upvote':
+                post.like = post.like - 1
+                post.rating = post.like - post.dislike
+            elif    kind == 'downvote':
+                post.dislike = post.dislike -1
+                post.rating = post.like - post.dislike
+            post.save()
+            
     return redirect('./')
 
 def postPage(request,user,title):
@@ -139,9 +148,26 @@ def search(request,problem,methods=['GET']):
         vote = Votes.objects.filter(user = request.session['id'])
         return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.session['id']})
 
-def sort(request,problem,methods=['GET']):
+def searchMyIdeas(request,methods=['GET']):
+    if  request.method == 'GET':
+        title = request.GET['search']
+        post = Posts.objects.filter(title__istartswith = title, author_id = request.session['id'])
+        return render(request, 'myIdeas.html',{'posts':post})
+
+def mySort(request,methods=['GET']):
     if(request.method == 'GET'):
-        category = request.GET['category']
+        sort = request.GET['sortBy']
+        if sort == 'Name':
+            post = Posts.objects.filter(author_id = request.session['id']).order_by('title')
+        elif sort == 'Top Rated':
+            post = Posts.objects.filter(author_id = request.session['id']).order_by('-rating')
+        elif sort == 'Date':
+            post = Posts.objects.filter(author_id = request.session['id']).order_by('-date_posted')
+
+        return render(request, 'myIdeas.html',{'posts':post})
+
+def sort(request,methods=['GET']):
+    if(request.method == 'GET'):
         sort = request.GET['sortBy']
         if sort == 'Name':
             post = Posts.objects.filter(category = category).order_by('title')
