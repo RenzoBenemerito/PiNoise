@@ -11,13 +11,17 @@
     <script src="{%  static 'js/jquery.js' %}"></script>
     <script src="{%  static 'js/bootstrap.min.js' %}"></script>
     <script src="{%  static 'js/dash.js' %}"></script>
-    <title>Renzo</title>
+    <title>PiNoise</title>
 </head>
 
 <body>
     <div class="profilePic">
-        <img src="{%  static 'pic/cat.gif' %}" alt="" class="imgProf">
-        <h3>{{user}} <br> 20 <br> Marikina City</h3>
+        {% if user.pic %}
+        <img src="{{user.pic.url}}" alt="" class="imgProf">
+        {% else %}
+        <img src="PiNoiseApp/media/default.png" alt="" class="imgProf">
+        {% endif %}
+        <h3>{{user.fName}} {{user.mName}} {{user.lName}}<br> </h3>
     </div>
     <div class="nav">
         <ul class="navList">

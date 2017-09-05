@@ -6,16 +6,9 @@
         <h1>Categories</h1>
         <br>
         <ul class="list">
-            <li><a href="pPage/Politics">Politics</a></li>
-            <li><a href="pPage/Education">Education</a></li>
-            <li><a href="pPage/Infrastructure">Infrastructure</a></li>
-            <li><a href="pPage/Budget">Budget</a></li>
-            <li><a href="pPage/Government">Government</a></li>
-            <li><a href="pPage/Governmental%20Departments">Governmental Departments</a></li>
-            <li><a href="pPage/Drugs">Drugs</a></li>
-            <li><a href="pPage/Criminals">Criminals</a></li>
-            <li><a href="pPage/Addiction">Addiction</a></li>
-            <li><a href="pPage/Tax">Tax</a></li>
+            {% for c in category %}
+            <li><a href="pPage/{{c.category}}">{{c.category}}</a></li>
+            {% endfor %}
         </ul>
     </div>
 {% endblock %}

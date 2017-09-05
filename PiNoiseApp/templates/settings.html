@@ -15,5 +15,12 @@
 
             <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <br>
+    <form action="{% url 'changePic' %}" enctype="multipart/form-data" method='POST'>
+        {% csrf_token %}
+        <input type="file" name='picture'>
+        <br>
+        <button type='submit' class='btn btn-primary'>Change Profile Picture</button>
+    </form>
 
 {% endblock %}

@@ -6,6 +6,7 @@ class Users(models.Model):
     lName = models.CharField(max_length=45)
     email = models.EmailField(max_length=100)
     password = models.CharField(max_length=45)
+    pic = models.ImageField(upload_to='profile_pic',blank=True)
     
     def __int__(self):
         return self.id
@@ -29,6 +30,15 @@ class Posts(models.Model):
     dislike = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)
     
+    def Post_title(self):
+        return self.title
+
+    def Post_author(self):
+        return self.author
+
+    def Post_category(self):
+        return self.category
+
 class Votes(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE)
     post = models.ForeignKey(Posts,on_delete=models.CASCADE)
@@ -39,6 +49,31 @@ class Votes(models.Model):
 
 class ReplyPost(models.Model):
     post = models.ForeignKey(Posts,on_delete=models.CASCADE)
-    author = models.CharField(max_length=45)
+    author = models.ForeignKey(Users,on_delete=models.CASCADE)
     reply = models.CharField(max_length=1000)
-    
+    date_posted = models.DateField(auto_now=True)
+
+class ReplytoReply(models.Model):
+    post = models.ForeignKey(Posts,on_delete=models.CASCADE)
+    replyToPost = models.ForeignKey(ReplyPost,on_delete=models.CASCADE)
+    replyToComment = models.CharField(max_length=1000)
+    author = models.ForeignKey(Users,on_delete=models.CASCADE)
+    date_posted = models.DateField(auto_now=True)
+
+class Reports(models.Model):
+    post = models.ForeignKey(Posts,on_delete=models.CASCADE)
+    user = models.ForeignKey(Users,on_delete=models.CASCADE)
+    offence = models.CharField(max_length = 45)
+
+    def title(self):
+        return self.post.title
+
+    def author(self):
+        return self.post.author
+
+    def reporter(self):
+        fName = self.user.fName +" "+ self.user.mName +" "+ self.user.lName
+        return fName 
+
+    def reason(self):
+        return self.offence

@@ -3,8 +3,9 @@
 <body>
     <div class="container-fluid pane">
         <div class="titlePane">
+            <img src="{{post.author_id.pic.url}}" alt="" id='pPic'>
             <h2>{{post.title}}</h2>
-            <h4>by {{post.author}}</h4>
+            <h4>by <span id="auth">{{post.author}}</span></h4>
             <h5>Category: <span id='category'>{{post.category}}</span></h5>
             <h6>date posted: {{post.date_posted}}</h6>
         </div>
@@ -17,6 +18,7 @@
             <br>
             <br>
         {% endif %}
+        <button class='btn btn-danger' data-toggle='modal' data-target='#reportModal'>Report Post</button>
         <div class="updatePane" style='display:none'>
             <form action='updatePost' method="POST" id="update">
                 {% csrf_token %}
@@ -28,10 +30,86 @@
                 <div class="bCont">
                     <button class="btn btn-primary" type='submit'>Update Idea</button>
                 </div>
+            </form> 
+        </div>
+        <div class="row">
+            <h2>Comments</h2>
+        </div>
+        <div class="row">
+            <div class="commentPane">
+                {% for c in comments %}
+                <div class="commentSection">
+                    <img src="{{c.author.pic.url}}" alt="" class='pPicC'>{% if c.author.id == userLog %}
+                        <button class="deleteC"></button>
+                    {% endif %}
+                    <h4 class='name'>{{c.author.fName}} {{c.author.mName}} {{c.author.lName}}</h4>
+                    <p>{{c.reply}}</p>  
+                    <hr> 
+                    <div class="replyPane container-fluid">
+                        {% for r in reply %}
+                            
+                            <div class="replyDiv">
+                                {% if r.author.id == userLog %}
+                                    <button class="deleteR"></button>
+                                {% endif %}
+                               {% if r.replyToPost.id == c.id %}
+                                    <img src="{{r.author.pic.url}}" alt="" class='pPicC'>
+                                    <h4 class='name'>{{r.author.fName}} {{r.author.mName}} {{r.author.lName}}</h4>
+                                    <p>{{r.replyToComment}}</p>
+                               {% endif %}
+                            </div>
+                                <hr>
+
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <div class="reply">
+                        <button id="reply">Reply</button>
+                        <form action="reply" id='replyForm' style='display:none'>
+                            <input type="text" name='reply' id='reply'>
+                            <button>Reply</button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div>
+            <form action="comment">
+                <textarea type="text" name='comment' class='tarea'></textarea>
+                <br>
+                <button type='submit'>Add Comment</button>
             </form>
         </div>
-        <div class="commentPane">
-
+    </div>
+    <div id="reportModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">  
+                    <form action="report" id='report'>
+                        <label for="reason">Select a Reason:</label>
+                        <select name="reason" id="reason" class='form-group'>
+                            <option value="Default">Select<button></button></option>
+                            <option value="Inappropriate Category">Inappropriate Category<button></button></option>
+                            <option value="Inappropriate Content">Innapropriate Content<button></button></option>
+                        </select>
+                
+                </div>
+                <div class="modal-footer">
+                    <button type='submit' class='btn btn-danger'>Report</button>
+                    </form>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        
         </div>
     </div>
 {% endblock %}

@@ -16,7 +16,13 @@ urlpatterns = [
     url(r'^.*/mySort$',views.mySort,name='mySort'),
     url(r'^.*/(?P<problem>.*)/sort$',views.sort,name='sort'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/post_page$',views.postPage,name='postPage'),
+    url(r'^.*/(?P<category>.*)/(?P<user>.*)/(?P<title>.*)/report$',views.report,name='report'),
+    url(r'^.*/(?P<user>.*)/(?P<title>.*)/comment$',views.comment,name='comment'),
+    url(r'^.*/(?P<user>.*)/(?P<title>.*)/deleteComment$',views.dComment,name='dComment'),
+    url(r'^.*/(?P<user>.*)/(?P<title>.*)/deleteReply$',views.dReply,name='dReply'),
+    url(r'^.*/(?P<user>.*)/(?P<title>.*)/reply$',views.reply,name='reply'),
     url(r'^.*/(?P<titleBefore>.*)/updatePost$',views.updateIdea,name='updateIdea'),
     url(r'^passReset$',views.passreset,name='passreset'),
+    url(r'^changePic',views.changePic,name='changePic'),
     url(r'^.*/vote$',views.vote,name='vote'),
     ]

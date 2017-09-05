@@ -112,7 +112,7 @@ textarea{
 input{
     color: black;
 }
-.delete{
+.delete,.deleteC, .deleteR{
     float: right;
     height: 25px;
     width: 25px;
@@ -135,4 +135,48 @@ input{
 }
 a,a:hover{
     text-decoration: none;
+}
+.commentPane{
+    padding: 0 10px;
+    margin-left: 3%;
+}
+.commentSection{
+    background: white;
+    padding: 2% 2%;
+    color: black;
+}
+.tarea{
+    width: 500px;
+    height: 100px;;
+}
+.name{
+    color: black;
+    display: inline;
+    margin: 0;
+    font-weight: 10px;
+}
+.replyPane{
+    padding: 0 4%;
+}
+.replyDiv{
+    padding: 1%;
+}
+#pPic{
+    border-radius: 100px;
+    border: solid 3px orange;
+    height: 7%;
+    width: 7%;
+    float: left;
+    margin: 1%;
+}
+.pPicC{
+    border-radius: 100px;
+    border: solid 3px orange;
+    height: 4%;
+    width: 4%;
+    float: left;
+    margin-right: 1%;
+}
+#reportModal{
+    color: black;
 }
