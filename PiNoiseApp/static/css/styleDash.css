@@ -177,6 +177,6 @@ a,a:hover{
     float: left;
     margin-right: 1%;
 }
-#reportModal{
+#reportModal,#messageModal{
     color: black;
 }

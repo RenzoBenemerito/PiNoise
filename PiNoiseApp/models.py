@@ -7,7 +7,8 @@ class Users(models.Model):
     email = models.EmailField(max_length=100)
     password = models.CharField(max_length=45)
     pic = models.ImageField(upload_to='profile_pic',blank=True)
-    
+    governmentEntity = models.IntegerField()
+
     def __int__(self):
         return self.id
 

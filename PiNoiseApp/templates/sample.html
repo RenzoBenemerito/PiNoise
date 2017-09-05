@@ -1,0 +1,22 @@
+{% for p in posts %} <!-- p is any variable, posts is the key you pass to the view -->
+    <div class="container-fluid">
+        <h1>{{p.name}}</h1> <!-- we declare field values with {{}} pname is the field -->
+        <p>{{p.post}}</p>
+    </div>
+{% endfor %} <!-- end the for loop -->
+
+
+<!-- EXAMPLE FOR TABLE -->
+<table>
+    <tr>
+        <th>Name</th> <!-- Table Headings -->
+        <th>Address</th>
+        <th>Age</th>
+    </tr>
+    {% for p in users %} <!-- p is any variable and users is the key -->
+    <tr>
+        <td>{{p.name}}</td>
+        <td>{{p.address}}</td>
+        <td>{{p.age}}</td>
+    </tr>
+</table>

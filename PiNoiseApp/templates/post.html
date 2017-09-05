@@ -3,7 +3,11 @@
 <body>
     <div class="container-fluid pane">
         <div class="titlePane">
-            <img src="{{post.author_id.pic.url}}" alt="" id='pPic'>
+            {% if post.author_id.pic %}
+                <img src="{{post.author_id.pic.url}}" alt="" id='pPic'>
+            {% else %}
+                <img src="/media/profile_pic/default.png" alt="" class="imgProf">
+            {% endif %}
             <h2>{{post.title}}</h2>
             <h4>by <span id="auth">{{post.author}}</span></h4>
             <h5>Category: <span id='category'>{{post.category}}</span></h5>
@@ -19,6 +23,9 @@
             <br>
         {% endif %}
         <button class='btn btn-danger' data-toggle='modal' data-target='#reportModal'>Report Post</button>
+        {% if user.governmentEntity == 1 %}
+        <button class='btn btn-info' data-toggle='modal' data-target='#messageModal'>Message Author</button>
+        {% endif %}
         <div class="updatePane" style='display:none'>
             <form action='updatePost' method="POST" id="update">
                 {% csrf_token %}
@@ -38,40 +45,63 @@
         <div class="row">
             <div class="commentPane">
                 {% for c in comments %}
-                <div class="commentSection">
-                    <img src="{{c.author.pic.url}}" alt="" class='pPicC'>{% if c.author.id == userLog %}
-                        <button class="deleteC"></button>
-                    {% endif %}
-                    <h4 class='name'>{{c.author.fName}} {{c.author.mName}} {{c.author.lName}}</h4>
-                    <p>{{c.reply}}</p>  
-                    <hr> 
-                    <div class="replyPane container-fluid">
-                        {% for r in reply %}
+                    <div class="commentSection">
+                        {% if c.author.pic %}
+                            <img src="{{c.author.pic.url}}" alt="" class='pPicC'>
+                            {% if c.author.governmentEntity == 1%}
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                            {% endif %}
+                        {% else %}
+                            <img src="/media/profile_pic/default.png" alt="" class="pPicC">  
+                            {% if c.author.governmentEntity == 1 %}
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true">a</span>
+                            {% endif %}  
+                        {% endif %}    
+                        {% if c.author.id == userLog %}
+                            <button class="deleteC"></button>
+                        {% endif %}
+                        <h4 class='name'>{{c.author.fName}} {{c.author.mName}} {{c.author.lName}}</h4>
+                        <p>{{c.reply}}</p>  
+                        <hr> 
+                        <div class="replyPane container-fluid">
                             
-                            <div class="replyDiv">
-                                {% if r.author.id == userLog %}
-                                    <button class="deleteR"></button>
+                            {% for r in reply %}
+                                {% if r.replyToPost.id == c.id %}
+                                    <div class="replyDiv">
+                                        {% if r.author.id == userLog %}
+                                            <button class="deleteR"></button>
+                                        {% endif %}
+                                    {% if r.replyToPost.id == c.id %}
+                                    {% if r.author.pic %}
+                                        <img src="{{r.author.pic.url}}" alt="" class='pPicC'>
+                                        {% if r.author.governmentEntity == 1 %}
+                                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                        {% endif %}
+                                    {% else %}
+                                        <img src="/media/profile_pic/default.png" alt="" class="pPicC">   
+                                        {% if r.author.governmentEntity == 1 %}
+                                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                        {% endif %}
+                                    {% endif %}  
+                                        <h4 class='name'>{{r.author.fName}} {{r.author.mName}} {{r.author.lName}}</h4>
+                                        <p>{{r.replyToComment}}</p>
+                                    {% endif %}
+                                    </div>
+                                        <hr>
                                 {% endif %}
-                               {% if r.replyToPost.id == c.id %}
-                                    <img src="{{r.author.pic.url}}" alt="" class='pPicC'>
-                                    <h4 class='name'>{{r.author.fName}} {{r.author.mName}} {{r.author.lName}}</h4>
-                                    <p>{{r.replyToComment}}</p>
-                               {% endif %}
-                            </div>
-                                <hr>
-
-                        {% endfor %}
+                            {% endfor %}
+                            
+                        </div>
+                        <br>
+                        <div class="reply">
+                            <button class="reply">Reply</button>
+                            <form action="reply" class='replyForm' style='display:none'>
+                                <input type="text" name='reply' id='reply'>
+                                <button>Reply</button>
+                            </form>
+                        </div>
                     </div>
                     <br>
-                    <div class="reply">
-                        <button id="reply">Reply</button>
-                        <form action="reply" id='replyForm' style='display:none'>
-                            <input type="text" name='reply' id='reply'>
-                            <button>Reply</button>
-                        </form>
-                    </div>
-                </div>
-                <br>
                 {% endfor %}
             </div>
         </div>
@@ -91,7 +121,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modal Header</h4>
+                    <h4 class="modal-title">Report Post</h4>
                 </div>
                 <div class="modal-body">  
                     <form action="report" id='report'>
@@ -112,4 +142,29 @@
         
         </div>
     </div>
+
+    <div id="messageModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+            
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Message Author</h4>
+                    </div>
+                    <div class="modal-body">  
+                        <form action="sendMessage" id='report' method='POST'>
+                                {% csrf_token %}
+                            <label for="reason">Message</label>
+                            <textarea name="message" id="messages" cols="30" rows="10"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type='submit' class='btn btn-info'>Send</button>
+                        </form>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
 {% endblock %}

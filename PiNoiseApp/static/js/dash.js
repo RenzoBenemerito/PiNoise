@@ -87,23 +87,23 @@ $(document).ready(function(){
         $('.updatePane').css('display','block');
     });
 
-    $('#reply').click(function(){
-        $('#replyForm').removeAttr('style');
-        $('#replyForm').css('display','block');
+    $('.reply').click(function(){
+        $('.replyForm').removeAttr('style');
+        $('.replyForm').css('display','block');
     });
 
-    $('#replyForm').submit(function(){
+    $('.replyForm').submit(function(){
         var parent = $(this).parent().parent();
         var comment = parent.first().children('p').text();
         var author = parent.first().children('h4').text();
         $('<input />').attr('type', 'hidden')
         .attr('name', "comment")
         .attr('value', comment)
-        .appendTo('#replyForm');
+        .appendTo('.replyForm');
         $('<input />').attr('type', 'hidden')
         .attr('name', "author")
         .attr('value', author)
-        .appendTo('#replyForm');
+        .appendTo('.replyForm');
     });
 
     $('.deleteC').click(function(event){

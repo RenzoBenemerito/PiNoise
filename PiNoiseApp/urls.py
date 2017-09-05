@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^.*/(?P<problem>.*)/sort$',views.sort,name='sort'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/post_page$',views.postPage,name='postPage'),
     url(r'^.*/(?P<category>.*)/(?P<user>.*)/(?P<title>.*)/report$',views.report,name='report'),
+    url(r'^.*/(?P<category>.*)/(?P<user>.*)/(?P<title>.*)/sendMessage$',views.sendMessage,name='sendMessage'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/comment$',views.comment,name='comment'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/deleteComment$',views.dComment,name='dComment'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/deleteReply$',views.dReply,name='dReply'),

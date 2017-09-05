@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from . models import Users,Posts,Category,Votes,ReplyPost,ReplytoReply,Reports
 from django import forms
+from django.core.mail import send_mail
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.contrib import messages
+from django.conf import settings as conf_settings
 
 def index(request,methods=['POST']):
     if(request.method == 'POST'):
@@ -51,7 +53,6 @@ def problemPage(request,problem):
     vote = Votes.objects.filter(user = request.session['id'])
     user = Users.objects.get(id = request.session['id'])
     fName = user.fName + " " + user.mName + " " + user.lName
-    print(user.pic.url)
     return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id'],'userName':fName,'user':user})
 
 def postIdea(request,problem,methods=['POST']):
@@ -170,6 +171,7 @@ def searchMyIdeas(request,methods=['GET']):
 def mySort(request,methods=['GET']):
     if(request.method == 'GET'):
         sort = request.GET['sortBy']
+        user = Users.objects.get(id=request.session['id'])
         if sort == 'Name':
             post = Posts.objects.filter(author_id = request.session['id']).order_by('title')
         elif sort == 'Top Rated':
@@ -177,7 +179,7 @@ def mySort(request,methods=['GET']):
         elif sort == 'Date':
             post = Posts.objects.filter(author_id = request.session['id']).order_by('-date_posted')
 
-        return render(request, 'myIdeas.html',{'posts':post})
+        return render(request, 'myIdeas.html',{'posts':post,'user':user})
 
 def sort(request,problem,methods=['GET']):
     if(request.method == 'GET'):
@@ -247,7 +249,7 @@ def changePic(request,methods=['POST']):
     
     return redirect('./dashboard')
 
-def report(request,category,title,user,methods='GET'):
+def report(request,category,title,user,methods=['GET']):
     if request.method == 'GET':
         reason = request.GET['reason']
         name = user.split(' ');
@@ -257,3 +259,16 @@ def report(request,category,title,user,methods='GET'):
         report.save()
 
     return redirect('./post_page')        
+
+def sendMessage(request,category,title,user,methods=['POST']):
+    if request.method == "POST":
+        entity = Users(id = request.session['id'])
+        subject = "PinoiseApp Post(" + title +", " + category + ", " + user + ")" 
+        message = request.POST['message']
+        fromEmail = conf_settings.EMAIL_HOST_USER
+        name = user.split(' ');
+        author = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+        to = [author.email]
+        send_mail(subject,message,fromEmail,to,fail_silently=False)
+
+        return redirect('./post_page')

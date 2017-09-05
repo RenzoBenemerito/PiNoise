@@ -105,7 +105,7 @@ body{
     z-index: 10000;
     height: 100%;
     width: 0;
-    background-color: rgba(33, 150, 243,.4);
+    background-color: rgba(33, 150, 243,.7);
     transition: all 0.3s ease-in-out;
     color: white;
 }
