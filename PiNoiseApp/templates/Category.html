@@ -42,7 +42,7 @@
 {% for post in posts %}
 <div class="post">
     <div class="vote">
-        {% if post.user_id == userLog %}
+        {% if post.vote %}
             {% if post.vote == 'upvote' %}
                 <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote' style='color:blue'></span>
                 <h4>{{post.rating}}</h4>

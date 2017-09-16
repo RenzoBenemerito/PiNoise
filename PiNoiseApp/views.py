@@ -56,8 +56,16 @@ def logout(request):
     return render(request,'index.html')
 
 def problemPage(request,problem):
-    posts = Posts.objects.raw('SELECT * FROM pinoiseapp_posts left join pinoiseapp_votes ON pinoiseapp_posts.id=pinoiseapp_votes.post_id WHERE category="{}";'.format(problem))
+    posts = Posts.objects.filter(category = problem)
     vote = Votes.objects.filter(user = request.session['id'])
+    for p in posts:
+        for v in vote:
+            if p.id == v.post.id:
+                if v.vote == "upvote":
+                    p.vote = "upvote"
+                elif v.vote == "downvote":
+                    p.vote = "downvote"
+
     user = Users.objects.get(id = request.session['id'])
     fName = user.fName + " " + user.mName + " " + user.lName
     return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id'],'userName':fName,'user':user})
