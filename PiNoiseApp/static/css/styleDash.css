@@ -84,11 +84,11 @@ body{
     border-bottom: solid 5px orange;
 }
 .up:hover{
-    color: blue;
+    color: blue !important;
     cursor: pointer;
 }
 .down:hover{
-    color: red;
+    color: red !important; 
     cursor: pointer;
 }
 hr{

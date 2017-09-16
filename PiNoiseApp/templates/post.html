@@ -54,7 +54,7 @@
                         {% else %}
                             <img src="/media/profile_pic/default.png" alt="" class="pPicC">  
                             {% if c.author.governmentEntity == 1 %}
-                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true">a</span>
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                             {% endif %}  
                         {% endif %}    
                         {% if c.author.id == userLog %}
@@ -95,7 +95,7 @@
                         <br>
                         <div class="reply">
                             <button class="reply">Reply</button>
-                            <form action="reply" class='replyForm' style='display:none'>
+                            <form action="#" class='replyForm' style='display:none'>
                                 <input type="text" name='reply' id='reply'>
                                 <button>Reply</button>
                             </form>
@@ -107,7 +107,7 @@
         </div>
         
         <div>
-            <form action="comment">
+            <form action='#' id='commentForm'>
                 <textarea type="text" name='comment' class='tarea'></textarea>
                 <br>
                 <button type='submit'>Add Comment</button>

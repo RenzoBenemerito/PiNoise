@@ -15,8 +15,15 @@ def index(request,methods=['POST']):
         email = request.POST['email']
         password = request.POST['pass']
 
-        reg = Users(fName = fName,mName = mName,lName = lName, email = email,password = password)
-        reg.save()
+        try:
+            exist = Users.objects.get(fName = fName,mName = mName,lName = lName, email = email)
+        except Users.DoesNotExist:
+            pass
+        if exist is not None:
+            return HttpResponse("There is already an account with those credentials.")
+        else:
+            reg = Users(fName = fName,mName = mName,lName = lName, email = email,password = password)
+            reg.save()
 
     return render(request, 'index.html')
 
@@ -184,6 +191,7 @@ def mySort(request,methods=['GET']):
 def sort(request,problem,methods=['GET']):
     if(request.method == 'GET'):
         sort = request.GET['sortBy']
+        user = Users.objects.get(id = request.session['id'])
         if sort == 'Name':
             post = Posts.objects.filter(category = problem).order_by('title')
             vote = Votes.objects.filter(user = request.session['id'])
@@ -194,30 +202,32 @@ def sort(request,problem,methods=['GET']):
             post = Posts.objects.filter(category = problem).order_by('date_posted')
             vote = Votes.objects.filter(user = request.session['id'])
 
-        return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.session['id']})
+        return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.session['id'],'user':user})
 
 def comment(request,title,user,methods=['GET']):
     if  request.method == 'GET':
         comment = request.GET['comment']
         post = Posts.objects.get(title = title,author = user)
+        userLog = Users.objects.get(id = request.session['id'])
         theComment = ReplyPost(post = post,author = Users.objects.get(id=request.session['id']),reply = comment)
         theComment.save()
 
-        return redirect('./post_page')
+        return render(request, 'comment.html',{'user':userLog , 'reply':comment})
 
 def reply(request,title,user,methods=['GET']):
     if  request.method == 'GET':
         comment = request.GET['comment']
         replyText = request.GET['reply']
         author = request.GET['author']
+        userLog = Users.objects.get(id = request.session['id'])
         post = Posts.objects.get(title = title,author = user)
         name = author.split(' ');
         user = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
         reply = ReplyPost.objects.get(post = post,author = user, reply = comment)
-        theReply = ReplytoReply(post = reply.post,replyToPost = reply,author = Users.objects.get(id=request.session['id']),replyToComment = replyText)
+        theReply = ReplytoReply(post = post,replyToPost = reply,author = Users.objects.get(id=request.session['id']),replyToComment = replyText)
         theReply.save()
 
-        return redirect('./post_page')
+        return render(request, 'reply.html',{'user':userLog , 'reply':replyText})
 
 def dComment(request,title,user,methods=['GET']):
     comment = request.GET['comment']
@@ -225,7 +235,7 @@ def dComment(request,title,user,methods=['GET']):
     post = Posts.objects.get(title = title,author = user)
     name = author.split(' ');
     user = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
-    reply = ReplyPost.objects.get(post = post,author = user, reply = comment)
+    reply = ReplyPost.objects.filter(post = post,author = user, reply = comment)
     reply.delete()
 
     return redirect('./post_page')
@@ -236,7 +246,12 @@ def dReply(request,title,user,methods=['GET']):
     post = Posts.objects.get(title = title,author = user)
     name = author.split(' ');
     user = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
-    reply = ReplytoReply.objects.get(post = post,author = user, replyToComment = comment)
+    authorC = request.GET['authorC']
+    name = authorC.split(' ');
+    authorComment = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+    commentC = request.GET['commentC']
+    theComment = ReplyPost.objects.get(post = post,author = authorComment,reply = commentC)
+    reply = ReplytoReply.objects.filter(post = post,author = user, replyToComment = comment, replyToPost = theComment)
     reply.delete()
 
     return redirect('./post_page')

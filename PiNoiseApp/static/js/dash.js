@@ -38,6 +38,7 @@ $(document).ready(function(){
         event.preventDefault();
         var choice = confirm('Are you sure you want to delete your idea?');
         if(choice == true){
+            var div = $(this).parents().eq(3);
             var title = $(this).parent().text();
             $.ajax({
                 method: 'GET',
@@ -46,17 +47,29 @@ $(document).ready(function(){
                 datatype: 'json',
             })
             .done(function(){
-                window.location.href = './';
+                $(div).hide();
             });
         }
         
     });
 
     $('.up,.down').click(function(){
+        var vote = $(this);
         var pTitle = $(this).parent().next()
         var title = $(pTitle).first().find('h2').text();
         var author = $(pTitle).first().find('h4').text();
         var kind = $(this).attr('id')
+        var currentState = $(this).attr('style');
+
+        if(kind == 'upvote'){
+            var ratingObj = $(this).next();
+            var rating = parseInt($(this).next().text());
+        }
+        else if(kind == 'downvote'){
+            var ratingObj = $(this).prev();
+            var rating = parseInt($(this).prev().text());
+        }
+
         $.ajax({
             method: 'GET',
             url: 'vote',
@@ -66,8 +79,30 @@ $(document).ready(function(){
                 'author':author,
             },
             datatype: 'json',
-            success: function(){
-                window.location.href = './';
+            success: function(event){
+                if(kind == 'upvote'){
+                    $('vote:hover').css('color','blue');
+                    if(currentState == undefined || currentState == 'color: white;'){
+                        $(vote).css('color','blue');
+                        rating += 1;
+                    }
+                    else{
+                        $(vote).css('color','white');
+                        rating -= 1;
+                    }
+                    $(ratingObj).text(rating);
+                }
+                else if(kind == 'downvote'){
+                    if(currentState == undefined || currentState == 'color: white;'){
+                        $(vote).css('color','red');
+                        rating -= 1;
+                    }
+                    else{
+                        $(vote).css('color','white');
+                        rating += 1;
+                    }
+                    $(ratingObj).text(rating);
+                }
             }
         });
     });
@@ -87,27 +122,41 @@ $(document).ready(function(){
         $('.updatePane').css('display','block');
     });
 
-    $('.reply').click(function(){
+    $(document).delegate('.reply','click',function(){
         $('.replyForm').removeAttr('style');
         $('.replyForm').css('display','block');
     });
 
-    $('.replyForm').submit(function(){
+    $('.replyForm').submit(function(evt){
+        evt.preventDefault();
         var parent = $(this).parent().parent();
         var comment = parent.first().children('p').text();
         var author = parent.first().children('h4').text();
-        $('<input />').attr('type', 'hidden')
-        .attr('name', "comment")
-        .attr('value', comment)
-        .appendTo('.replyForm');
-        $('<input />').attr('type', 'hidden')
-        .attr('name', "author")
-        .attr('value', author)
-        .appendTo('.replyForm');
+        var reply = $('#reply').val();
+        $.ajax({
+            method: 'GET',
+            url: './reply',
+            data: {'comment':comment, 'author':author, 'reply':reply},
+            success: function(obj){
+                $('.replyPane').append(obj);
+            }
+        });
     });
 
-    $('.deleteC').click(function(event){
+    $('#commentForm').submit(function(event){
         event.preventDefault();
+        var comment = $('.tarea').val();
+        $.ajax({
+            method: 'GET',
+            url: './comment',
+            data: {'comment': comment},
+            success: function(obj){
+                $('.commentPane').append(obj);
+            }
+        });
+    });
+
+    $(document).delegate('.deleteC', 'click', function(event){
         var choice = confirm('Are you sure you want to delete your comment?');
 
         if(choice == true){
@@ -121,28 +170,29 @@ $(document).ready(function(){
                 datatype: 'json',
             })
             .done(function(){
-                window.location.href = './post_page';
+                $(parent).hide();
             });
         }
         
     });
 
-    $('.deleteR').click(function(event){
+    $(document).delegate('.deleteR','click',function(event){
         event.preventDefault();
         var choice = confirm('Are you sure you want to delete your comment?');
-
         if(choice == true){
             var parent = $(this).parent();
             var comment = $(parent).children('p').eq(0).text();
             var author = $(this).parent().children('h4').eq(0).text();
+            var authorC = $(this).parents().eq(2).children('h4').text();
+            var commentC = $(this).parents().eq(2).children('p').text();
             $.ajax({
                 method: 'GET',
                 url:'deleteReply',
-                data: {"comment":comment,'author':author},
+                data: {"comment":comment,'author':author,'authorC':authorC,'commentC':commentC},
                 datatype: 'json',
             })
             .done(function(){
-                window.location.href = './post_page';
+                $(parent).hide();
             });
         }
         

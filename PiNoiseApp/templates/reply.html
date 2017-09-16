@@ -1,0 +1,19 @@
+<div class="replyDiv">
+<button class="deleteR"></button>
+    {% if user.pic %}
+        <img src="{{user.pic.url}}" alt="" class='pPicC'>
+        {% if user.governmentEntity == 1 %}
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        {% endif %}
+    {% else %}
+        <img src="/media/profile_pic/default.png" alt="" class="pPicC">   
+        {% if user.governmentEntity == 1 %}
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        {% endif %}
+    {% endif %}  
+    <h4 class='name'>{{user.fName}} {{user.mName}} {{user.lName}}</h4>
+    <p>{{reply}}</p>
+</div>
+    <hr>
+
+

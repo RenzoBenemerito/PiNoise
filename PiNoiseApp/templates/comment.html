@@ -1,0 +1,26 @@
+<div class="commentSection">
+    {% if user.pic %}
+        <img src="{{user.pic.url}}" alt="" class='pPicC'>
+        {% if user.governmentEntity == 1%}
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        {% endif %}
+    {% else %}
+        <img src="/media/profile_pic/default.png" alt="" class="pPicC">  
+        {% if user.governmentEntity == 1 %}
+            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        {% endif %}  
+    {% endif %}    
+    <button class="deleteC"></button>
+    <h4 class='name'>{{user.fName}} {{user.mName}} {{user.lName}}</h4>
+    <p>{{reply}}</p>  
+    <hr> 
+    <br>
+    <div class="reply">
+        <button class="reply">Reply</button>
+        <form action="reply" class='replyForm' style='display:none'>
+            <input type="text" name='reply' id='reply'>
+            <button>Reply</button>
+        </form>
+    </div>
+    </div>
+    <br>
