@@ -1,63 +1,63 @@
 from django.shortcuts import render, redirect
-from . models import Users,Posts,Category,Votes,ReplyPost,ReplytoReply,Reports
+from . models import User, Users, Posts, Category, Votes, ReplyPost, ReplytoReply, Reports
 from django import forms
 from django.core.mail import send_mail
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.contrib import messages
 from django.conf import settings as conf_settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 
 def index(request,methods=['POST']):
-    if(request.method == 'POST'):
+
+    if request.method == 'POST':
         fName = request.POST['fName']
-        mName = request.POST['mName']
         lName = request.POST['lName']
+        username = request.POST['username']
         email = request.POST['email']
         password = request.POST['pass']
 
-        try:
-            exist = Users.objects.get(fName = fName,mName = mName,lName = lName, email = email)
-        except Users.DoesNotExist:
-            pass
-        if exist is not None:
-            return HttpResponse("There is already an account with those credentials.")
-        else:
-            reg = Users(fName = fName,mName = mName,lName = lName, email = email,password = password)
-            reg.save()
+        user = User(first_name = fName,last_name = lName,username = username, email = email,password = password)
+        user.set_password(user.password)
+        user.save()
+
+        userStat = Users(governmentEntity = 0)
+        userStat.user = user
+        userStat.save()
 
     return render(request, 'index.html')
 
+@login_required
 def dash(request):
-    if request.session.has_key('id'):
-        user = Users.objects.get(id = request.session['id'])
-        fName = user.fName + " " + user.mName + " " + user.lName
-        category = Category.objects.all()
-        return render(request,'dashboard.html',{'user':user,'category':category,'user':user})
-    else:
-        return HttpResponse("Error 404 You are not logged in.")
+    user = request.user
+    category = Category.objects.all()
+    return render(request,'dashboard.html',{'user':user,'category':category})
 
-def login(request,methods=['POST']): 
+
+def user_login(request,methods=['POST']): 
     if(request.method == 'POST'):
-        email = request.POST['emailLog']
+        userLog = request.POST['userLog']
         passLog = request.POST['passLog']
-        
-        log = Users.objects.get(email = email, password = passLog);
+        log = authenticate(username = userLog, password = passLog);
         if log:
-            request.session['id'] = log.id
+            login(request,log)
             return redirect('/pinoise/dashboard')
+        else:
+            return messages.error(request, 'No Account with such credentials.')
     else:
         return redirect('/pinoise')
 
-def logout(request):
-    try:
-        request.session.flush()
-    except KeyError:
-        pass
+@login_required
+def user_logout(request):
+    logout(request)
     return render(request,'index.html')
 
+@login_required
 def problemPage(request,problem):
     posts = Posts.objects.filter(category = problem)
-    vote = Votes.objects.filter(user = request.session['id'])
+    vote = Votes.objects.filter(user = request.user.id)
     for p in posts:
         for v in vote:
             if p.id == v.post.id:
@@ -66,9 +66,9 @@ def problemPage(request,problem):
                 elif v.vote == "downvote":
                     p.vote = "downvote"
 
-    user = Users.objects.get(id = request.session['id'])
-    fName = user.fName + " " + user.mName + " " + user.lName
-    return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id'],'userName':fName,'user':user})
+    user = request.user
+
+    return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.user,'user':user})
 
 def postIdea(request,problem,methods=['POST']):
     if(request.method == 'POST'):
@@ -76,9 +76,9 @@ def postIdea(request,problem,methods=['POST']):
         description = request.POST['ideation']
         category = request.POST['category']
         category1 = Category.objects.get(category=category)
-        poster = Users.objects.get(id=request.session['id'])
-        fName = poster.fName + " " + poster.mName + " " + poster.lName
-        post = Posts(author_id = poster,author = fName,title = title,description = description,category_id = category1,category = category1.category)
+        poster = request.user
+        username = poster.username
+        post = Posts(author_id = poster,author = username,title = title,description = description,category_id = category1,category = category1.category)
         post.save()
     
         return redirect('./')
@@ -89,7 +89,7 @@ def updateIdea(request,titleBefore,methods=['POST']):
         description = request.POST['ideation']
         category = request.POST['category']
         category1 = Category.objects.get(category=category)
-        poster = Users.objects.get(id=request.session['id'])
+        poster = request.user
         post = Posts.objects.get(author_id = poster,title = titleBefore,category_id = category1,category = category1.category)
         post.title = title
         post.description = description
@@ -98,45 +98,42 @@ def updateIdea(request,titleBefore,methods=['POST']):
         return redirect(url)
 
 def idea(request):
-    user = Users.objects.get(id = request.session['id'])
-    fName = user.fName + " " + user.mName + " " + user.lName
-    posts = Posts.objects.filter(author_id=request.session['id'])
+    user = request.user
+    posts = Posts.objects.filter(author_id=request.user.id)
     return render(request,'myIdeas.html',{'posts':posts,'user':user})
 
 def deletePost(request,methods=['GET']):
     title = request.GET['title']
-    posts = Posts.objects.filter(title = title, author_id = request.session['id'])
+    posts = Posts.objects.filter(title = title, author_id = request.user.id)
     posts.delete()
     return redirect('./')
 
-def settings(request):
-    user = Users.objects.get(id = request.session['id'])
-    fName = user.fName + " " + user.mName + " " + user.lName
-    return render(request, 'settings.html',{'user':user})
-
-def passreset(request,methods=['POST']):
-    user = Users.objects.get(id = request.session['id'])
-    oldPass = request.POST['pass']
-    newPass = request.POST['pass1']
-    newPass2 = request.POST['pass2']
-
-    if oldPass == user.password and newPass == newPass2:
-        user.password = newPass
-        user.save()
-    
-    return redirect('./')
-
+def settings(request,methods=['POST']):
+    userLog = request.user
+    if request.method == 'POST':
+        form = PasswordChangeForm(user = request.user, data = request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, form.user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('settings')
+        else:
+            return redirect('settings')
+    else:
+        form = PasswordChangeForm(request.user, request.POST)
+        return render(request, 'settings.html',{'user':userLog,'form':form})
+        
 def vote(request,methods=['GET']):
     title = request.GET['title']
     kind = request.GET['kind']
     author = request.GET['author']
     post = Posts.objects.get(title = title,author = author)
     try:
-        check = Votes.objects.get(user = request.session['id'], post = post.id)
+        check = Votes.objects.get(user = request.user.id, post = post.id)
     except Votes.DoesNotExist:
         check = None
     if check is None:
-        voter = Votes(user = Users.objects.get(id = request.session['id']),post = post,vote = kind)
+        voter = Votes(user = request.user,post = post,vote = kind)
         voter.save();
         if kind == 'upvote':
             post.like = post.like + 1
@@ -161,63 +158,88 @@ def postPage(request,user,title):
     post = Posts.objects.get(title = title,author = user)
     comment = ReplyPost.objects.filter(post = post)
     reply = ReplytoReply.objects.filter(post = post)
-    user = Users.objects.get(id = request.session['id'])
-    fName = user.fName + " " + user.mName + " " + user.lName
+    user = request.user
 
-    return render(request, 'post.html',{'post':post,'userLog':request.session['id'],'comments':comment,'reply':reply,'user':user})
+    return render(request, 'post.html',{'post':post,'comments':comment,'userLog':request.user.id,'reply':reply,'user':user})
 
 def search(request,problem,methods=['GET']):
     if(request.method == 'GET'):
         title = request.GET['search']
         category = request.GET['category']
-        posts = Posts.objects.raw('SELECT * FROM pinoiseapp_posts left join pinoiseapp_votes ON pinoiseapp_posts.id=pinoiseapp_votes.post_id WHERE category="{}" && pinoiseapp_posts.title LIKE CONCAT("%%","{}","%%");'.format(problem,title))
-        user = Users.objects.get(id = request.session['id'])
-        fName = user.fName + " " + user.mName + " " + user.lName
-        return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.session['id'],'user':user})
+        posts = Posts.objects.filter(title__istartswith = title)
+        vote = Votes.objects.filter(user = request.user.id)
+        for p in posts:
+            for v in vote:
+                if p.id == v.post.id:
+                    if v.vote == "upvote":
+                        p.vote = "upvote"
+                    elif v.vote == "downvote":
+                        p.vote = "downvote"
+        user = request.user
+        return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'user':user})
 
 def searchMyIdeas(request,methods=['GET']):
     if  request.method == 'GET':
         title = request.GET['search']
-        user = Users.objects.get(id = request.session['id'])
-        fName = user.fName + " " + user.mName + " " + user.lName
-        post = Posts.objects.filter(title__istartswith = title, author_id = request.session['id'])
+        user = request.user
+        post = Posts.objects.filter(title__istartswith = title, author_id = request.user.id)
         return render(request, 'myIdeas.html',{'posts':post,'user':user})
 
 def mySort(request,methods=['GET']):
     if(request.method == 'GET'):
         sort = request.GET['sortBy']
-        user = Users.objects.get(id=request.session['id'])
+        user = request.user
         if sort == 'Name':
-            post = Posts.objects.filter(author_id = request.session['id']).order_by('title')
+            post = Posts.objects.filter(author_id = request.user.id).order_by('title')
         elif sort == 'Top Rated':
-            post = Posts.objects.filter(author_id = request.session['id']).order_by('-rating')
+            post = Posts.objects.filter(author_id = request.user.id).order_by('-rating')
         elif sort == 'Date':
-            post = Posts.objects.filter(author_id = request.session['id']).order_by('-date_posted')
+            post = Posts.objects.filter(author_id = request.user.id).order_by('-date_posted')
 
         return render(request, 'myIdeas.html',{'posts':post,'user':user})
 
 def sort(request,problem,methods=['GET']):
     if(request.method == 'GET'):
         sort = request.GET['sortBy']
-        user = Users.objects.get(id = request.session['id'])
+        user = request.user
         if sort == 'Name':
             post = Posts.objects.filter(category = problem).order_by('title')
-            vote = Votes.objects.filter(user = request.session['id'])
+            vote = Votes.objects.filter(user = request.user.id)
+            for p in post:
+                for v in vote:
+                    if p.id == v.post.id:
+                        if v.vote == "upvote":
+                            p.vote = "upvote"
+                        elif v.vote == "downvote":
+                            p.vote = "downvote"
         elif sort == 'Top Rated':
             post = Posts.objects.filter(category = problem).order_by('-rating')
-            vote = Votes.objects.filter(user = request.session['id'])
+            vote = Votes.objects.filter(user = request.user.id)
+            for p in post:
+                for v in vote:
+                    if p.id == v.post.id:
+                        if v.vote == "upvote":
+                            p.vote = "upvote"
+                        elif v.vote == "downvote":
+                            p.vote = "downvote"
         elif sort == 'Date':
             post = Posts.objects.filter(category = problem).order_by('date_posted')
-            vote = Votes.objects.filter(user = request.session['id'])
-
-        return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.session['id'],'user':user})
+            vote = Votes.objects.filter(user = request.user.id)
+            for p in post:
+                for v in vote:
+                    if p.id == v.post.id:
+                        if v.vote == "upvote":
+                            p.vote = "upvote"
+                        elif v.vote == "downvote":
+                            p.vote = "downvote"
+        return render(request, 'Category.html',{'problem':problem,'posts':post,'votes':vote,'userLog':request.user.id,'user':user})
 
 def comment(request,title,user,methods=['GET']):
     if  request.method == 'GET':
         comment = request.GET['comment']
         post = Posts.objects.get(title = title,author = user)
-        userLog = Users.objects.get(id = request.session['id'])
-        theComment = ReplyPost(post = post,author = Users.objects.get(id=request.session['id']),reply = comment)
+        userLog = request.user
+        theComment = ReplyPost(post = post,author = request.user,reply = comment)
         theComment.save()
 
         return render(request, 'comment.html',{'user':userLog , 'reply':comment})
@@ -227,12 +249,11 @@ def reply(request,title,user,methods=['GET']):
         comment = request.GET['comment']
         replyText = request.GET['reply']
         author = request.GET['author']
-        userLog = Users.objects.get(id = request.session['id'])
+        userLog = request.user
         post = Posts.objects.get(title = title,author = user)
-        name = author.split(' ');
-        user = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+        user = User.objects.get(username = author)
         reply = ReplyPost.objects.get(post = post,author = user, reply = comment)
-        theReply = ReplytoReply(post = post,replyToPost = reply,author = Users.objects.get(id=request.session['id']),replyToComment = replyText)
+        theReply = ReplytoReply(post = post,replyToPost = reply,author = request.user,replyToComment = replyText)
         theReply.save()
 
         return render(request, 'reply.html',{'user':userLog , 'reply':replyText})
@@ -241,8 +262,7 @@ def dComment(request,title,user,methods=['GET']):
     comment = request.GET['comment']
     author = request.GET['author']
     post = Posts.objects.get(title = title,author = user)
-    name = author.split(' ');
-    user = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+    user = User.objects.get(username = author)
     reply = ReplyPost.objects.filter(post = post,author = user, reply = comment)
     reply.delete()
 
@@ -252,11 +272,9 @@ def dReply(request,title,user,methods=['GET']):
     comment = request.GET['comment']
     author = request.GET['author']
     post = Posts.objects.get(title = title,author = user)
-    name = author.split(' ');
-    user = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+    user = User.objects.get(username = author)
     authorC = request.GET['authorC']
-    name = authorC.split(' ');
-    authorComment = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+    authorComment = User.objects.get(username = authorC)
     commentC = request.GET['commentC']
     theComment = ReplyPost.objects.get(post = post,author = authorComment,reply = commentC)
     reply = ReplytoReply.objects.filter(post = post,author = user, replyToComment = comment, replyToPost = theComment)
@@ -266,19 +284,19 @@ def dReply(request,title,user,methods=['GET']):
 
 def changePic(request,methods=['POST']):
     if request.method == 'POST':
-        user = Users.objects.get(id=request.session['id'])
-        user.pic = request.FILES['picture']
-        user.save()
+        user = User.objects.get(id = request.user.id)
+        userPic = Users.objects.get(user = user)
+        userPic.pic = request.FILES['picture']
+        userPic.save()
     
     return redirect('./dashboard')
 
 def report(request,category,title,user,methods=['GET']):
     if request.method == 'GET':
         reason = request.GET['reason']
-        name = user.split(' ');
-        user = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+        user = Users.objects.get(username = user)
         post = Posts.objects.get(title = title,category = category, author_id = user)
-        report = Reports(post = post, user = Users.objects.get(id=request.session['id']),offence = reason)
+        report = Reports(post = post, user = request.user,offence = reason)
         report.save()
 
     return redirect('./post_page')        
@@ -289,8 +307,7 @@ def sendMessage(request,category,title,user,methods=['POST']):
         subject = "PinoiseApp Post(" + title +", " + category + ", " + user + ")" 
         message = request.POST['message']
         fromEmail = conf_settings.EMAIL_HOST_USER
-        name = user.split(' ');
-        author = Users.objects.get(fName = name[0],mName = name[1],lName = name[2])
+        author = Users.objects.get(username = user)
         to = [author.email]
         send_mail(subject,message,fromEmail,to,fail_silently=False)
 

@@ -15,22 +15,26 @@
 </head>
 
 <body>
-    <div class="profilePic">
-        {% if user.pic %}
-        <img src="{{user.pic.url}}" alt="" class="imgProf">
-        {% else %}
-        <img src="/media/profile_pic/default.png" alt="" class="imgProf">
-        {% endif %}
-        <h3>{{user.fName}} {{user.mName}} {{user.lName}}<br> </h3>
-    </div>
-    <div class="nav">
-        <ul class="navList">
-            <li><a href="/pinoise/dashboard">Home</a></li>
-            <li><a href="/pinoise/myIdeas">My Ideas</a></li>
-            <li><a href="/pinoise/settings">Settings</a></li>
-            <li><a href="/pinoise/dashboard/logout">Log-Out</a></li>
-        </ul>
-    </div>
+    
+    <nav class="nav">
+        <div class="profilePic">
+            {% if user.users.pic %}
+            <img src="{{user.users.pic.url}}" alt="" class="imgProf">
+            {% else %}
+            <img src="/media/profile_pic/default.png" alt="" class="imgProf">
+            {% endif %}
+            <h3>{{user.username}}<br> </h3>
+        </div>
+        <div class="navItems">
+            <ul class="navList">
+                <li><a href="/pinoise/dashboard">Home</a></li>
+                <li><a href="/pinoise/myIdeas">My Ideas</a></li>
+                <li><a href="/pinoise/settings">Settings</a></li>
+                <li><a href="/pinoise/dashboard/logout">Log-Out</a></li>
+            </ul>
+        </div>
+        
+    </nav>
  {% block content %}
 
  {% endblock %}

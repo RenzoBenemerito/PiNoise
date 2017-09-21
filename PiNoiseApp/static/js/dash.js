@@ -122,12 +122,7 @@ $(document).ready(function(){
         $('.updatePane').css('display','block');
     });
 
-    $(document).delegate('.reply','click',function(){
-        $('.replyForm').removeAttr('style');
-        $('.replyForm').css('display','block');
-    });
-
-    $('.replyForm').submit(function(evt){
+    $(document).delegate('.replyForm','submit',function(evt){
         evt.preventDefault();
         var parent = $(this).parent().parent();
         var comment = parent.first().children('p').text();
@@ -198,6 +193,22 @@ $(document).ready(function(){
         
     });
 
+    $(document).delegate('.updateC','click',function(){
+        var state = $(this).text();
+        if(state == "Edit"){
+            $('.updateCPane').show();
+            $(this).text('Cancel');
+            $(this).removeClass('btn-success')
+            $(this).addClass('btn-danger')
+        }
+        else if(state == "Cancel"){
+            $('.updateCPane').hide();
+            $(this).text('Edit');
+            $(this).removeClass('btn-danger')
+            $(this).addClass('btn-success')
+        }
+        
+    });
     // $('#report').submit(function(){
     //     var post = $(this).parents().eq(3).prev().find('h2').eq(0).text();
     //     var author = $(this).parents().eq(3).prev().find('span#auth').eq(0).text();

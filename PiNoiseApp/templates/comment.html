@@ -11,8 +11,17 @@
         {% endif %}  
     {% endif %}    
     <button class="deleteC"></button>
-    <h4 class='name'>{{user.fName}} {{user.mName}} {{user.lName}}</h4>
+    <h4 class='name'>{{user.username}}</h4>
     <p>{{reply}}</p>  
+    {% if c.author.id == userLog %}
+    <button class="btn btn-success updateC">Edit</button>
+    {% endif %}
+    <div class="updateCPane" style='display:none'>
+        <form action="updateComment">
+            <textarea name="updateC" class="updateTar" cols="30" rows="10"></textarea>
+            <button type='submit' class="btn btn-primary">Ok</button>
+        </form>
+    </div>
     <hr> 
     <br>
     <div class="reply">

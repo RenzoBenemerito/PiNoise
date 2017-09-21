@@ -11,8 +11,17 @@
             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
         {% endif %}
     {% endif %}  
-    <h4 class='name'>{{user.fName}} {{user.mName}} {{user.lName}}</h4>
+    <h4 class='name'>{{user.username}}</h4>
     <p>{{reply}}</p>
+    {% if c.author.id == userLog %}
+    <button class="btn btn-success updateR">Edit</button>
+    {% endif %}
+    <div class="updateRPane" style='display:none'>
+    <form action="updateReply">
+    <textarea name="updateR" class="updateTar" cols="30" rows="10"></textarea>
+    <button type='submit' class="btn btn-primary">Ok</button>
+    </form>
+    </div>
 </div>
     <hr>
 

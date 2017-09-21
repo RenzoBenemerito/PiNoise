@@ -3,10 +3,10 @@
 <body>
     <div class="container-fluid pane">
         <div class="titlePane">
-            {% if post.author_id.pic %}
-                <img src="{{post.author_id.pic.url}}" alt="" id='pPic'>
+            {% if post.author_id.users.pic %}
+                <img src="{{post.author_id.users.pic.url}}" alt="" class='pPic'>
             {% else %}
-                <img src="/media/profile_pic/default.png" alt="" class="imgProf">
+                <img src="/media/profile_pic/default.png" alt="" class="pPic">
             {% endif %}
             <h2>{{post.title}}</h2>
             <h4>by <span id="auth">{{post.author}}</span></h4>
@@ -23,7 +23,7 @@
             <br>
         {% endif %}
         <button class='btn btn-danger' data-toggle='modal' data-target='#reportModal'>Report Post</button>
-        {% if user.governmentEntity == 1 %}
+        {% if user.users.governmentEntity == 1 %}
         <button class='btn btn-info' data-toggle='modal' data-target='#messageModal'>Message Author</button>
         {% endif %}
         <div class="updatePane" style='display:none'>
@@ -46,22 +46,31 @@
             <div class="commentPane">
                 {% for c in comments %}
                     <div class="commentSection">
-                        {% if c.author.pic %}
-                            <img src="{{c.author.pic.url}}" alt="" class='pPicC'>
-                            {% if c.author.governmentEntity == 1%}
+                        {% if c.author.users.pic %}
+                            <img src="{{c.author.users.pic.url}}" alt="" class='pPicC'>
+                            {% if c.author.users.governmentEntity == 1%}
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                             {% endif %}
                         {% else %}
                             <img src="/media/profile_pic/default.png" alt="" class="pPicC">  
-                            {% if c.author.governmentEntity == 1 %}
+                            {% if c.author.users.governmentEntity == 1 %}
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                             {% endif %}  
                         {% endif %}    
                         {% if c.author.id == userLog %}
                             <button class="deleteC"></button>
                         {% endif %}
-                        <h4 class='name'>{{c.author.fName}} {{c.author.mName}} {{c.author.lName}}</h4>
+                        <h4 class='name'>{{c.author.username}}</h4>
                         <p>{{c.reply}}</p>  
+                        {% if c.author.id == userLog %}
+                        <button class="btn btn-success updateC">Edit</button>
+                        {% endif %}
+                        <div class="updateCPane" style='display:none'>
+                            <form action="updateComment">
+                                <textarea name="updateC" class="updateTar" cols="30" rows="10"></textarea>
+                                <button type='submit' class="btn btn-primary">Ok</button>
+                            </form>
+                        </div>
                         <hr> 
                         <div class="replyPane container-fluid">
                             
@@ -72,19 +81,28 @@
                                             <button class="deleteR"></button>
                                         {% endif %}
                                     {% if r.replyToPost.id == c.id %}
-                                    {% if r.author.pic %}
-                                        <img src="{{r.author.pic.url}}" alt="" class='pPicC'>
-                                        {% if r.author.governmentEntity == 1 %}
+                                    {% if r.author.users.pic %}
+                                        <img src="{{r.author.users.pic.url}}" alt="" class='pPicC'>
+                                        {% if r.author.users.governmentEntity == 1 %}
                                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                                         {% endif %}
                                     {% else %}
                                         <img src="/media/profile_pic/default.png" alt="" class="pPicC">   
-                                        {% if r.author.governmentEntity == 1 %}
+                                        {% if r.author.users.governmentEntity == 1 %}
                                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                                         {% endif %}
                                     {% endif %}  
-                                        <h4 class='name'>{{r.author.fName}} {{r.author.mName}} {{r.author.lName}}</h4>
+                                        <h4 class='name'>{{r.author.username}}</h4>
                                         <p>{{r.replyToComment}}</p>
+                                        {% if c.author.id == userLog %}
+                                            <button class="btn btn-success updateR">Edit</button>
+                                        {% endif %}
+                                        <div class="updateRPane" style='display:none'>
+                                            <form action="updateReply">
+                                                <textarea name="updateR" class="updateTar" cols="30" rows="10"></textarea>
+                                                <button type='submit' class="btn btn-primary">Ok</button>
+                                            </form>
+                                        </div>
                                     {% endif %}
                                     </div>
                                         <hr>
@@ -94,8 +112,7 @@
                         </div>
                         <br>
                         <div class="reply">
-                            <button class="reply">Reply</button>
-                            <form action="#" class='replyForm' style='display:none'>
+                            <form action="#" class='replyForm'>
                                 <input type="text" name='reply' id='reply'>
                                 <button>Reply</button>
                             </form>

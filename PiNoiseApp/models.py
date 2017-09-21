@@ -1,16 +1,15 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+from django.contrib.auth.models import User
 class Users(models.Model):
-    fName = models.CharField(max_length=45)
-    mName = models.CharField(max_length=45)
-    lName = models.CharField(max_length=45)
-    email = models.EmailField(max_length=100)
-    password = models.CharField(max_length=45)
+    user = models.OneToOneField(User)
+
     pic = models.ImageField(upload_to='profile_pic',blank=True)
     governmentEntity = models.IntegerField(blank=True,default=0)
 
     def __int__(self):
-        return self.id
+        return self.user.id
 
 class Category(models.Model):
     category = models.CharField(max_length=100)
@@ -20,7 +19,7 @@ class Category(models.Model):
 
 
 class Posts(models.Model):
-    author_id = models.ForeignKey(Users,on_delete=models.CASCADE)
+    author_id = models.ForeignKey(User,on_delete=models.CASCADE)
     author = models.CharField(max_length=45)
     title = models.CharField(max_length=100)
     category_id = models.ForeignKey(Category,on_delete=models.CASCADE)
@@ -41,7 +40,7 @@ class Posts(models.Model):
         return self.category
 
 class Votes(models.Model):
-    user = models.ForeignKey(Users,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     post = models.ForeignKey(Posts,on_delete=models.CASCADE)
     vote = models.CharField(max_length=45)
 
@@ -50,7 +49,7 @@ class Votes(models.Model):
 
 class ReplyPost(models.Model):
     post = models.ForeignKey(Posts,on_delete=models.CASCADE)
-    author = models.ForeignKey(Users,on_delete=models.CASCADE)
+    author = models.ForeignKey(User,on_delete=models.CASCADE)
     reply = models.CharField(max_length=1000)
     date_posted = models.DateField(auto_now=True)
 
@@ -58,12 +57,12 @@ class ReplytoReply(models.Model):
     post = models.ForeignKey(Posts,on_delete=models.CASCADE)
     replyToPost = models.ForeignKey(ReplyPost,on_delete=models.CASCADE)
     replyToComment = models.CharField(max_length=1000)
-    author = models.ForeignKey(Users,on_delete=models.CASCADE)
+    author = models.ForeignKey(User,on_delete=models.CASCADE)
     date_posted = models.DateField(auto_now=True)
 
 class Reports(models.Model):
     post = models.ForeignKey(Posts,on_delete=models.CASCADE)
-    user = models.ForeignKey(Users,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     offence = models.CharField(max_length = 45)
 
     def title(self):
@@ -73,8 +72,8 @@ class Reports(models.Model):
         return self.post.author
 
     def reporter(self):
-        fName = self.user.fName +" "+ self.user.mName +" "+ self.user.lName
-        return fName 
+        username = self.user.username
+        return username 
 
     def reason(self):
         return self.offence
