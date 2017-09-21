@@ -1,19 +1,25 @@
 {% extends "header.html" %}
 {% block content %}
-<body>
-    <h3>Change Password</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        {{ form.errors }}
-        <button type="submit" class='btn btn-primary'>Save changes</button>
-    </form>
-    <br>
-    <form action="{% url 'changePic' %}" enctype="multipart/form-data" method='POST'>
-        {% csrf_token %}
-        <input type="file" name='picture'>
+<div class="container-fluid pane">
+    <div id="problemPane">
+        <h1>Settings</h1>
+    </div>
+    <div id="categoryPane">
+        <h3>Change Password</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            {{ form.errors }}
+            <button type="submit" class='btn btn-primary'>Save changes</button>
+        </form>
         <br>
-        <button type='submit' class='btn btn-primary'>Change Profile Picture</button>
-    </form>
+        <form action="{% url 'changePic' %}" enctype="multipart/form-data" method='POST'>
+            {% csrf_token %}
+            <input type="file" name='picture'>
+            <br>
+            <button type='submit' class='btn btn-primary'>Change Profile Picture</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

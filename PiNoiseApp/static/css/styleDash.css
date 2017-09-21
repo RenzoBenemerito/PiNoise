@@ -1,6 +1,6 @@
 html,body{
     margin: 0;
-    width: 100%;
+    max-width: 100%;
     height: 100%;
 }
 body{
@@ -8,51 +8,75 @@ body{
     color: white;
 }
 .nav{
-    width: 25%;
     background: #37474F;
     color: white;
     text-align: center;
-    margin: 0;
     font-size: 1.8em;
-    vertical-align: middle;
-    float: left
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 0;
+    height: 100%;
+    width: 17%;
 }
 .navList{
     list-style: none;
+    padding: 0;
 }
 .navList>li{
-    
+    margin: 5% 0;
 }
-.navList>li>a{
+.navList>li>.itemDiv>a{
     color: white;
     text-decoration: none;
 }
-.navList>li>a:hover{
+.navList>li>.itemDiv>a:hover{
     color: yellow;
 }
+.navList>li>.itemDiv:hover{
+    background-color: #263238;
+}
 .profilePic{
-    width: 40%;
+    width: 100%;
     height: 20%;
+    margin: 20% 0 10% 0;
+    background-color: #455A64;
 }
 .imgProf{
-    height: 100%;
-    width: 20%;
-    float: left;
+    height: 140px;
+    width: 140px;
     margin: 0;
+    text-align: center;
+    border: 5px solid orange;
+    border-radius: 10000px;
 }
 .list{
     font-size: 1.5em;
 }
-.list>li{
-    margin: 2% 0;
-}
 .list>li:hover{
-    margin: 2% 0;
     color: yellow;
     cursor: pointer;
 }
 .pane{
-    background-color: rgba(69,90,100 ,0.5);
+    background-color: #FAFAFA;
+    top: 0;
+    margin-left: 17%;
+    height: 100%;
+    width: auto;
+    color: black;
+    padding: 0;
+}
+#problemPane{
+    background-color: #64B5F6;
+    padding: 0.5%;
+    margin: 0;
+    color: white;
+}
+#categoryPane{
+    padding: 0 2%;
+}
+.postPane{
+    padding: 0 2%;
 }
 .post{
     position: relative;
@@ -71,6 +95,7 @@ body{
     flex-direction: column;
     justify-content: center;
     font-size: 1.7em;
+    color: white;
 }
 .ideaPane{
     position: relative;
@@ -100,14 +125,17 @@ hr{
 }
 textarea{
     width: 100%;
-    height: 100px;
+    height: 70px;
     color: black;
     font-size: 1.3em;
 }
-.bCont{
-    background-color: rgba(158,158,158 ,1);
-    padding: 10px;
+.postIdeaPane{
+    background-color: #F5F5F5;
+    padding: 0.25%;
+    border-radius: 10px;
+    margin: 10px 0;
 }
+
 input{
     color: black;
 }
@@ -163,16 +191,16 @@ a,a:hover{
 .pPic{
     border-radius: 100px;
     border: solid 3px orange;
-    height: 7%;
-    width: 7%;
+    height: 115px;
+    width: 115px;
     float: left;
     margin: 1%;
 }
 .pPicC{
     border-radius: 100px;
     border: solid 3px orange;
-    height: 4%;
-    width: 4%;
+    height: 70px;
+    width: 70px;
     float: left;
     margin-right: 1%;
 }
@@ -180,5 +208,5 @@ a,a:hover{
     color: black;
 }
 .updateTar{
-    height: 70px;
+    height: 50px;
 }

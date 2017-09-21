@@ -1,7 +1,7 @@
 <div class="commentSection">
-    {% if user.pic %}
-        <img src="{{user.pic.url}}" alt="" class='pPicC'>
-        {% if user.governmentEntity == 1%}
+    {% if user.users.pic %}
+        <img src="{{user.users.pic.url}}" alt="" class='pPicC'>
+        {% if user.users.governmentEntity == 1%}
             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
         {% endif %}
     {% else %}
@@ -25,8 +25,7 @@
     <hr> 
     <br>
     <div class="reply">
-        <button class="reply">Reply</button>
-        <form action="reply" class='replyForm' style='display:none'>
+        <form action="reply" class='replyForm'>
             <input type="text" name='reply' id='reply'>
             <button>Reply</button>
         </form>

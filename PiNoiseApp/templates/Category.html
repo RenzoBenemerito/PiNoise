@@ -1,72 +1,78 @@
 {% extends "header.html" %}
 {% block content %}
-<br>
 <div class="container-fluid pane">
-<h1 id="category">{{problem}}</h1>
-<h3>Have an idea?</h3>
-<form action='addPost' method="POST" id="post">
-    {% csrf_token %}
-    <label for="title">Title</label>
-    <br>
-    <input type="text" name='title'>
-    <br>
-    <br>
-    <textarea name="ideation" id="ideation"></textarea>
-    <div class="bCont">
-        <button class="btn btn-primary" type='submit'>Add Idea</button>
-    </div>
-</form>
+<div id="problemPane">
+    <h1 id="category">{{problem}}</h1>
+</div>
 
-<br>
-<br>
-<div class="row">
-    <div class="col-md-6">
-        <form action="search" id='searchForm' class='form-inline' id='searchPost'>
-            <label for="search">Search: </label>
-            <input class="form-control" type="text" placeholder="Seach..." id='search' name='search'>
-            <button type='submit' class='btn btn-primary'>Search</button>
+<div id="categoryPane">
+    <div class="postIdeaPane">
+        <h3>Have an idea?</h3>
+        <form action='addPost' method="POST" id="post">
+            {% csrf_token %}
+            <label for="title">Title</label>
+            <input type="text" name='title'>
+            <br>
+            <br>
+            <textarea name="ideation" id="ideation"></textarea>
+            <button class="btn btn-primary" type='submit'>Add Idea</button>
         </form>
     </div>
-    <div class="col-md-6">
-        <form action="sort" id='sortForm'>
-            <div class="btn-group" role="group" aria-label="Sort">     
-                    <input type="submit" class="btn btn-secondary" value="Name">
-                    <input type="submit" class="btn btn-secondary" value="Top Rated">
-                    <input type="submit" class="btn btn-secondary" value="Date">              
-            </div>
-         </form>   
+    
+    <div class="postIdeaPane">
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="search" id='searchForm' class='form-inline' id='searchPost'>
+                <label for="search">Search: </label>
+                <input class="form-control" type="text" placeholder="Seach..." id='search' name='search'>
+                <button type='submit' class='btn btn-primary'>Search</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form action="sort" id='sortForm'>
+                <div class="btn-group" role="group" aria-label="Sort">     
+                        <input type="submit" class="btn btn-secondary" value="Name">
+                        <input type="submit" class="btn btn-secondary" value="Top Rated">
+                        <input type="submit" class="btn btn-secondary" value="Date">              
+                </div>
+            </form>   
+        </div>
     </div>
-</div>
 
 
-{% for post in posts %}
-<div class="post">
-    <div class="vote">
-        {% if post.vote %}
-            {% if post.vote == 'upvote' %}
-                <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote' style='color:blue'></span>
-                <h4>{{post.rating}}</h4>
-                <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
-            {% elif post.vote == 'downvote' %}
-                <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
-                <h4>{{post.rating}}</h4>
-                <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote' style='color:red'></span>
+    {% for post in posts %}
+    <div class="post">
+        <div class="vote">
+            {% if post.vote %}
+                {% if post.vote == 'upvote' %}
+                    <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote' style='color:blue'></span>
+                    <h4>{{post.rating}}</h4>
+                    <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
+                {% elif post.vote == 'downvote' %}
+                    <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
+                    <h4>{{post.rating}}</h4>
+                    <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote' style='color:red'></span>
+                {% endif %}
+            {% else %}
+            <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
+            <h4>{{post.rating}}</h4>
+            <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
             {% endif %}
-        {% else %}
-        <span class="glyphicon glyphicon-thumbs-up up" aria-hidden="true" id='upvote'></span>
-        <h4>{{post.rating}}</h4>
-        <span class="glyphicon glyphicon-thumbs-down down" aria-hidden="true" id='downvote'></span>
-        {% endif %}
+        </div>
+        <a href="{{post.author}}/{{post.title}}/post_page">
+            <div class="ideaPane">
+                <h2>{{post.title}}</h2>
+                <h6 class='by'>by </h6><h4 class='auth'>{{post.author}}</h4>
+                <hr>
+                <p><span>{{post.description}}</span></p>
+            </div>    
+        </a>
+            
     </div>
-    <a href="{{post.author}}/{{post.title}}/post_page">
-        <div class="ideaPane">
-            <h2>{{post.title}}</h2>
-            <h6 class='by'>by </h6><h4 class='auth'>{{post.author}}</h4>
-            <hr>
-            <p><span>{{post.description}}</span></p>
-        </div>    
-    </a>
-           
-</div>
+
+
 {% endfor %}
 {% endblock %}
+</div>
+</div>

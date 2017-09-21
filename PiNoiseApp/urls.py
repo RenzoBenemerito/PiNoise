@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^.*/(?P<category>.*)/(?P<user>.*)/(?P<title>.*)/report$',views.report,name='report'),
     url(r'^.*/(?P<category>.*)/(?P<user>.*)/(?P<title>.*)/sendMessage$',views.sendMessage,name='sendMessage'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/comment$',views.comment,name='comment'),
+    url(r'^.*/(?P<user>.*)/(?P<title>.*)/editComment$',views.uComment,name='uComment'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/deleteComment$',views.dComment,name='dComment'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/deleteReply$',views.dReply,name='dReply'),
     url(r'^.*/(?P<user>.*)/(?P<title>.*)/reply$',views.reply,name='reply'),

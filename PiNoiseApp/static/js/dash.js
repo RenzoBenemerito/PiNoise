@@ -107,12 +107,12 @@ $(document).ready(function(){
         });
     });
 
-    $('#update').submit(function(){
+    $('.update').submit(function(){
         var category = $('#category').text();
         $('<input />').attr('type', 'hidden')
           .attr('name', "category")
           .attr('value', category)
-          .appendTo('#update');
+          .appendTo('.update');
       return true;
     });
 
@@ -124,16 +124,18 @@ $(document).ready(function(){
 
     $(document).delegate('.replyForm','submit',function(evt){
         evt.preventDefault();
+        var thisElement = $(this);
         var parent = $(this).parent().parent();
         var comment = parent.first().children('p').text();
         var author = parent.first().children('h4').text();
-        var reply = $('#reply').val();
+        var reply = $(this).find('#reply').val();
         $.ajax({
             method: 'GET',
             url: './reply',
             data: {'comment':comment, 'author':author, 'reply':reply},
             success: function(obj){
-                $('.replyPane').append(obj);
+                thisElement.hide()
+                parent.append(obj);
             }
         });
     });
@@ -171,6 +173,27 @@ $(document).ready(function(){
         
     });
 
+    $(document).delegate('.uComment', 'submit', function(event){
+        var choice = confirm('Are you sure you want to edit your comment?');
+        var uComment = $(this).find('.updateTar').val();
+        if(choice == true){
+            var parent = $(this).parents().eq(1);
+            var comment = $(parent).children('p').text();
+            var author = $(parent).children('h4').text();
+            var changeThis = $(parent).children('p');
+            $.ajax({
+                method: 'GET',
+                url:'./editComment',
+                data: {"comment":comment,'uComment':uComment,'author':author},
+                datatype: 'json',
+            })
+            .done(function(){
+                changeThis.text(uComment);
+            });
+        }
+        
+    });
+
     $(document).delegate('.deleteR','click',function(event){
         event.preventDefault();
         var choice = confirm('Are you sure you want to delete your comment?');
@@ -196,13 +219,13 @@ $(document).ready(function(){
     $(document).delegate('.updateC','click',function(){
         var state = $(this).text();
         if(state == "Edit"){
-            $('.updateCPane').show();
+            $(this).next().show();
             $(this).text('Cancel');
             $(this).removeClass('btn-success')
             $(this).addClass('btn-danger')
         }
         else if(state == "Cancel"){
-            $('.updateCPane').hide();
+            $(this).next().hide();
             $(this).text('Edit');
             $(this).removeClass('btn-danger')
             $(this).addClass('btn-success')

@@ -1,14 +1,16 @@
 {% extends "header.html" %}
 {% block content %}
-<body>
-    <br>
     <div class="container-fluid pane">
-        <h1>Categories</h1>
+        <div id="problemPane">
+            <h1>Categories</h1>
+        </div>
         <br>
-        <ul class="list">
-            {% for c in category %}
-            <li><a href="pPage/{{c.category}}">{{c.category}}</a></li>
-            {% endfor %}
-        </ul>
+        <div id="categoryPane">
+            <ul class="list">
+                {% for c in category %}
+                <li><a href="pPage/{{c.category}}">{{c.category}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}

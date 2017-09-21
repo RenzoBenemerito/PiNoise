@@ -258,6 +258,18 @@ def reply(request,title,user,methods=['GET']):
 
         return render(request, 'reply.html',{'user':userLog , 'reply':replyText})
 
+def uComment(request,title,user,methods=['GET']):
+    updatedComment = request.GET['uComment']
+    comment = request.GET['comment']
+    author = request.GET['author']
+    post = Posts.objects.get(title = title,author = user)
+    user = User.objects.get(username = author)
+    reply = ReplyPost.objects.get(post = post,author = user, reply = comment)
+    reply.reply = updatedComment
+    reply.save()
+
+    return redirect('./post_page')
+
 def dComment(request,title,user,methods=['GET']):
     comment = request.GET['comment']
     author = request.GET['author']
@@ -294,7 +306,7 @@ def changePic(request,methods=['POST']):
 def report(request,category,title,user,methods=['GET']):
     if request.method == 'GET':
         reason = request.GET['reason']
-        user = Users.objects.get(username = user)
+        user = User.objects.get(username = user)
         post = Posts.objects.get(title = title,category = category, author_id = user)
         report = Reports(post = post, user = request.user,offence = reason)
         report.save()
@@ -303,11 +315,11 @@ def report(request,category,title,user,methods=['GET']):
 
 def sendMessage(request,category,title,user,methods=['POST']):
     if request.method == "POST":
-        entity = Users(id = request.session['id'])
+        entity = Users(id = request.user.id)
         subject = "PinoiseApp Post(" + title +", " + category + ", " + user + ")" 
         message = request.POST['message']
         fromEmail = conf_settings.EMAIL_HOST_USER
-        author = Users.objects.get(username = user)
+        author = User.objects.get(username = user)
         to = [author.email]
         send_mail(subject,message,fromEmail,to,fail_silently=False)
 

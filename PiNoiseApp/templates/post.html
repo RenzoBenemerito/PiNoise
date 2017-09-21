@@ -2,7 +2,7 @@
 {% block content %}
 <body>
     <div class="container-fluid pane">
-        <div class="titlePane">
+        <div id="problemPane">
             {% if post.author_id.users.pic %}
                 <img src="{{post.author_id.users.pic.url}}" alt="" class='pPic'>
             {% else %}
@@ -13,9 +13,10 @@
             <h5>Category: <span id='category'>{{post.category}}</span></h5>
             <h6>date posted: {{post.date_posted}}</h6>
         </div>
+        <br>
         <div class="postPane">
             {{post.description}}
-        </div>
+        <br>
         <br>
         {% if post.author_id.id == userLog %}
             <button class='btn btn-primary' id='updatePost'>Update Post</button>
@@ -27,7 +28,7 @@
         <button class='btn btn-info' data-toggle='modal' data-target='#messageModal'>Message Author</button>
         {% endif %}
         <div class="updatePane" style='display:none'>
-            <form action='updatePost' method="POST" id="update">
+            <form action='updatePost' method="POST" class="update">
                 {% csrf_token %}
                 <label for="title">Title</label>
                 <br>
@@ -66,7 +67,7 @@
                         <button class="btn btn-success updateC">Edit</button>
                         {% endif %}
                         <div class="updateCPane" style='display:none'>
-                            <form action="updateComment">
+                            <form action=# class='uComment'>
                                 <textarea name="updateC" class="updateTar" cols="30" rows="10"></textarea>
                                 <button type='submit' class="btn btn-primary">Ok</button>
                             </form>
@@ -130,6 +131,7 @@
                 <button type='submit'>Add Comment</button>
             </form>
         </div>
+    </div>
     </div>
     <div id="reportModal" class="modal fade" role="dialog">
         <div class="modal-dialog">

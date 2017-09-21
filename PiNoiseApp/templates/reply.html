@@ -1,8 +1,8 @@
 <div class="replyDiv">
 <button class="deleteR"></button>
-    {% if user.pic %}
-        <img src="{{user.pic.url}}" alt="" class='pPicC'>
-        {% if user.governmentEntity == 1 %}
+    {% if user.users.pic %}
+        <img src="{{user.users.pic.url}}" alt="" class='pPicC'>
+        {% if user.users.governmentEntity == 1 %}
             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
         {% endif %}
     {% else %}
