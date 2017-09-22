@@ -129,13 +129,14 @@ $(document).ready(function(){
         var comment = parent.first().children('p').text();
         var author = parent.first().children('h4').text();
         var reply = $(this).find('#reply').val();
+        var parent1 = $(this).parent().prev().prev();
         $.ajax({
             method: 'GET',
             url: './reply',
             data: {'comment':comment, 'author':author, 'reply':reply},
             success: function(obj){
-                thisElement.hide()
-                parent.append(obj);
+                $(parent1).append(obj);
+                $(thisElement.parent()).append(thisElement);
             }
         });
     });
@@ -173,7 +174,8 @@ $(document).ready(function(){
         
     });
 
-    $(document).delegate('.uComment', 'submit', function(event){
+    $(document).delegate('.uComment', 'submit', function(evt){
+        evt.preventDefault();
         var choice = confirm('Are you sure you want to edit your comment?');
         var uComment = $(this).find('.updateTar').val();
         if(choice == true){
@@ -181,19 +183,55 @@ $(document).ready(function(){
             var comment = $(parent).children('p').text();
             var author = $(parent).children('h4').text();
             var changeThis = $(parent).children('p');
+            var hideThis = $(this).parent();
+            var button = $(this).parent().prev();
             $.ajax({
                 method: 'GET',
                 url:'./editComment',
                 data: {"comment":comment,'uComment':uComment,'author':author},
                 datatype: 'json',
+                success: function(){
+                    $(hideThis).hide();
+                    $(changeThis).text(uComment);
+                    $(button).text('Edit');
+                    $(button).removeClass('btn-danger')
+                    $(button).addClass('btn-success')
+                }
             })
-            .done(function(){
-                changeThis.text(uComment);
-            });
         }
         
     });
 
+    $(document).delegate('.uReply', 'submit', function(evt){
+        evt.preventDefault();
+        var choice = confirm('Are you sure you want to edit your reply?');
+        
+        if(choice == true){
+            var parent = $(this).parents().eq(1);
+            var uReply = $(this).children('.updateTar').val();
+            var comment = $(parent).children('p').text();
+            var author = $(parent).children('h4').text();
+            var authorC = $(this).parents().eq(3).children('h4').text();
+            var commentC = $(this).parents().eq(3).children('p').text();
+            var changeThis = $(parent).children('p');
+            var hideThis = $(this).parent();
+            var button = $(this).parent().prev();
+            $.ajax({
+                method: 'GET',
+                url:'./editReply',
+                data: {"comment":comment,'uReply':uReply,'author':author,'authorC':authorC,'commentC':commentC},
+                datatype: 'json',
+                success: function(){
+                    $(hideThis).hide();
+                    $(changeThis).text(uReply);
+                    $(button).text('Edit');
+                    $(button).removeClass('btn-danger')
+                    $(button).addClass('btn-success')
+                }
+            })
+        }
+        
+    });
     $(document).delegate('.deleteR','click',function(event){
         event.preventDefault();
         var choice = confirm('Are you sure you want to delete your comment?');
@@ -231,6 +269,11 @@ $(document).ready(function(){
             $(this).addClass('btn-success')
         }
         
+    });
+
+    $(".toggle-icon").click(function(){
+        $(".nav").toggleClass('statusNav');
+
     });
     // $('#report').submit(function(){
     //     var post = $(this).parents().eq(3).prev().find('h2').eq(0).text();

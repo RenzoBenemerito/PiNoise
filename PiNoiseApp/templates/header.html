@@ -16,7 +16,7 @@
 
 <body>
     
-    <nav class="nav">
+    <nav class="nav statusNav">
         <div class="profilePic">
             {% if user.users.pic %}
             <img src="{{user.users.pic.url}}" alt="" class="imgProf">
@@ -35,6 +35,7 @@
 
         
     </nav>
+<body>
  {% block content %}
 
  {% endblock %}

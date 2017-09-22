@@ -148,3 +148,18 @@ input{
 #aboutText{
     font-size: 1.5em;
 }
+.expand{
+    width: 25%;
+}
+.retract{
+    width: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .expand{
+        width: 100%;
+    }
+    .retract{
+        width: 0;
+    }
+}

@@ -1,5 +1,5 @@
 <div class="replyDiv">
-<button class="deleteR"></button>
+    <button class="deleteR"></button>
     {% if user.users.pic %}
         <img src="{{user.users.pic.url}}" alt="" class='pPicC'>
         {% if user.users.governmentEntity == 1 %}
@@ -17,10 +17,10 @@
     <button class="btn btn-success updateR">Edit</button>
     {% endif %}
     <div class="updateRPane" style='display:none'>
-    <form action="updateReply">
-    <textarea name="updateR" class="updateTar" cols="30" rows="10"></textarea>
-    <button type='submit' class="btn btn-primary">Ok</button>
-    </form>
+        <form action="updateReply">
+            <textarea name="updateR" class="updateTar" cols="30" rows="10"></textarea>
+            <button type='submit' class="btn btn-primary">Ok</button>
+        </form>
     </div>
 </div>
     <hr>

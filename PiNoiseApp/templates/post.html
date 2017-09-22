@@ -1,8 +1,9 @@
 {% extends "header.html" %}
 {% block content %}
-<body>
+
     <div class="container-fluid pane">
         <div id="problemPane">
+            <button class='toggle-icon btn btn-primary'>&#9776;</button>
             {% if post.author_id.users.pic %}
                 <img src="{{post.author_id.users.pic.url}}" alt="" class='pPic'>
             {% else %}
@@ -67,9 +68,9 @@
                         <button class="btn btn-success updateC">Edit</button>
                         {% endif %}
                         <div class="updateCPane" style='display:none'>
-                            <form action=# class='uComment'>
+                            <form action='#' class='uComment'>
                                 <textarea name="updateC" class="updateTar" cols="30" rows="10"></textarea>
-                                <button type='submit' class="btn btn-primary">Ok</button>
+                                <button class="btn btn-primary">Ok</button>
                             </form>
                         </div>
                         <hr> 
@@ -96,17 +97,17 @@
                                         <h4 class='name'>{{r.author.username}}</h4>
                                         <p>{{r.replyToComment}}</p>
                                         {% if c.author.id == userLog %}
-                                            <button class="btn btn-success updateR">Edit</button>
+                                            <button class="btn btn-success updateC">Edit</button>
                                         {% endif %}
                                         <div class="updateRPane" style='display:none'>
-                                            <form action="updateReply">
+                                            <form action="#" class="uReply">
                                                 <textarea name="updateR" class="updateTar" cols="30" rows="10"></textarea>
                                                 <button type='submit' class="btn btn-primary">Ok</button>
                                             </form>
                                         </div>
                                     {% endif %}
                                     </div>
-                                        <hr>
+                                    <hr>
                                 {% endif %}
                             {% endfor %}
                             

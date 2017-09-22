@@ -55,8 +55,10 @@ $('a[href*="#"]')
     
   });
   $('#login').click(function(){
-      $('.log-in-pane').css("width","25%");
+      $('.log-in-pane').removeClass("retract");
+      $('.log-in-pane').addClass("expand");
   });
   $('.close1').click(function(){
-    $('.log-in-pane').css("width","0");
+    $('.log-in-pane').removeClass("expand");
+    $('.log-in-pane').addClass("retract");
   });

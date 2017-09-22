@@ -268,7 +268,7 @@ def uComment(request,title,user,methods=['GET']):
     reply.reply = updatedComment
     reply.save()
 
-    return redirect('./post_page')
+    return HttpResponse('')
 
 def dComment(request,title,user,methods=['GET']):
     comment = request.GET['comment']
@@ -279,6 +279,20 @@ def dComment(request,title,user,methods=['GET']):
     reply.delete()
 
     return redirect('./post_page')
+
+def editReply(request,title,user,methods=['GET']):
+    comment = request.GET['comment']
+    author = request.GET['author']
+    uReply = request.GET['uReply']
+    post = Posts.objects.get(title = title,author = user)
+    user = User.objects.get(username = author)
+    authorC = request.GET['authorC']
+    authorComment = User.objects.get(username = authorC)
+    commentC = request.GET['commentC']
+    theComment = ReplyPost.objects.get(post = post,author = authorComment,reply = commentC)
+    reply = ReplytoReply.objects.filter(post = post,author = user, replyToComment = comment, replyToPost = theComment).update(replyToComment = uReply)
+
+    return HttpResponse('/')
 
 def dReply(request,title,user,methods=['GET']):
     comment = request.GET['comment']

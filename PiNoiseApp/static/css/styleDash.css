@@ -210,3 +210,41 @@ a,a:hover{
 .updateTar{
     height: 50px;
 }
+.toggle-icon{
+    display: none;
+}
+h1{
+    display: inline-block;
+}
+@media only screen and (max-width: 768px) {
+    .nav {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: visible;
+        opacity: 1;
+        transition: opacity 0.5s 0s, visibility 0s 0.2s;
+        z-index: 999;
+    }
+
+    .statusNav{
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.5s 0s, visibility 0s 0.2s;
+    }
+
+    .pane{
+        margin-left: 0;
+    }
+
+    .toggle-icon{
+        display: inline;
+    }
+    .vote{
+        width: 10%;
+    }
+    .ideaPane{
+        margin-left: 12%; 
+    }
+}
