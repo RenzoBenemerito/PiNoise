@@ -1,16 +1,36 @@
 from django.shortcuts import render, redirect
-from . models import User, Users, Posts, Category, Votes, ReplyPost, ReplytoReply, Reports
+from PiNoiseApp.models import User, Users, Posts, Category, Votes, ReplyPost, ReplytoReply, Reports
 from django import forms
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.http import HttpRequest
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.contrib import messages
 from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from rest_framework.views import APIView
+from rest_framework.generics import (
+    CreateAPIView,
+    ListAPIView,
+    RetrieveAPIView
+)
+from rest_framework.permissions import (
+    AllowAny, 
+    IsAuthenticated, 
+    IsAdminUser,
+    IsAuthenticatedOrReadOnly,
+)
+from .permissions import IsOwnerOrReadOnly
 from rest_framework.response import Response
+from .serializers import (
+    UsersSerializer,
+    CategorySerializer,
+    PostsSerializer,
+    VotesSerializer,
+    ReplyPostSerializer,
+    ReplytoReplySerializer,
+    ReportsSerializer
+)
 
 def index(request,methods=['POST']):
 
@@ -340,3 +360,36 @@ def sendMessage(request,category,title,user,methods=['POST']):
         send_mail(subject,message,fromEmail,to,fail_silently=False)
 
         return redirect('./post_page')
+
+
+
+
+class categoryList(APIView):
+    def get(self, request):
+        queryset = Category.objects.all()
+        serializer = CategorySerializer(queryset, many = True)
+        return Response(serializer.data)
+
+class CategoryListView(ListAPIView):
+    queryset = Posts.objects.all()
+    serializer_class = PostsSerializer
+    lookup_field = "category"
+
+class PostCreateView(CreateAPIView):
+    queryset = Posts.objects.all()
+    serializer_class = PostsSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user)
+
+class UserCreateView(CreateAPIView):
+    serializer_class = UserCreateSerializer
+    def perform_create(self, serializer):
+        username = self.request.POST["username"]
+        first_name = self.request.POST["first_name"]
+        last_name = self.request.POST["last_name"]
+        email = self.request.POST["email"]
+        password = self.request.POST["password"]
+
+        serializer.save(username = username , first_name = first_name, last_name = last_name, email = email, password= password)
+

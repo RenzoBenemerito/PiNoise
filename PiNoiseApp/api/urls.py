@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.conf.urls import url
 from . import views
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -29,6 +29,9 @@ urlpatterns = [
     url(r'^.*/(?P<titleBefore>.*)/updatePost$',views.updateIdea,name='updateIdea'),
     url(r'^changePic',views.changePic,name='changePic'),
     url(r'^.*/vote$',views.vote,name='vote'),
+    url(r'^categories', views.categoryList.as_view()),
+    url(r'^(?P<category>.*)/problem-page', views.CategoryListView.as_view()),
+    url(r'^register$', views.UserCreateView.as_view()),
     ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

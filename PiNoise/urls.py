@@ -22,4 +22,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^pinoise/', include('PiNoiseApp.urls')),
+    url(r'^api/', include('PiNoiseApp.api.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
