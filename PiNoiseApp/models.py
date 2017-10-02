@@ -26,6 +26,7 @@ class Posts(models.Model):
     category = models.CharField(max_length=100)
     description = models.TextField(max_length=5000)
     date_posted = models.DateField(auto_now=True)
+    pic = models.ImageField(upload_to='post_pic',blank=True)
     like = models.IntegerField(default=0)
     dislike = models.IntegerField(default=0)
     rating = models.IntegerField(default=0)

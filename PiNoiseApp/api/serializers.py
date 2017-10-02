@@ -1,4 +1,5 @@
-from rest_framework import serializers, CharField
+from rest_framework import serializers
+from rest_framework.serializers import CharField
 from ..models import User, Users, Posts, Votes, Category, ReplyPost, ReplytoReply, Reports
 from django.contrib.auth import get_user_model
 
@@ -29,12 +30,22 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return validated_data
 
 class UserLogInSerializer(serializers.ModelSerializer):
-    token = CharField(allow_black = True, read_only = True)
+    username = CharField(required = False, allow_blank = True)
+    token = CharField(allow_blank = True, read_only = True)
     class Meta:
         model = user
         fields = ["username","password","token"]
         extra_kwargs = {"password":{"write_only":True}
         }
+
+    def validate(self, data):
+        username = data.get["username",None]
+        password = data.get["password", None]
+        user = User.objects.get(username = username)
+        if user:
+            if not user.check_password(password):
+                raise ValidationError("Incorrect Credentials!")
+        return data
 
 class CategorySerializer(serializers.ModelSerializer):
 

@@ -34,7 +34,7 @@ def index(request,methods=['POST']):
 @login_required
 def dash(request):
     user = request.user
-    category = Category.objects.all()
+    category = Category.objects.all().order_by('category')
     return render(request,'dashboard.html',{'user':user,'category':category})
 
 
@@ -73,14 +73,15 @@ def problemPage(request,problem):
     return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.user,'user':user})
 
 def postIdea(request,problem,methods=['POST']):
-    if(request.method == 'POST'):
+    if request.method == 'POST':
         title = request.POST['title']
         description = request.POST['ideation']
         category = request.POST['category']
+        pic = request.FILES.get('pic',None)
         category1 = Category.objects.get(category=category)
         poster = request.user
         username = poster.username
-        post = Posts(author_id = poster,author = username,title = title,description = description,category_id = category1,category = category1.category)
+        post = Posts(author_id = poster,author = username,title = title,description = description,category_id = category1,category = category1.category,pic = pic)
         post.save()
     
         return redirect('./')
@@ -90,11 +91,13 @@ def updateIdea(request,titleBefore,methods=['POST']):
         title = request.POST['title']
         description = request.POST['ideation']
         category = request.POST['category']
+        pic = request.FILES.get('pic',None)
         category1 = Category.objects.get(category=category)
         poster = request.user
         post = Posts.objects.get(author_id = poster,title = titleBefore,category_id = category1,category = category1.category)
         post.title = title
         post.description = description
+        post.pic = pic
         post.save()
         url = '../'+title +'/post_page'
         return redirect(url)
@@ -179,6 +182,13 @@ def search(request,problem,methods=['GET']):
                         p.vote = "downvote"
         user = request.user
         return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'user':user})
+
+def searchCategory(request,methods=['GET']):
+    if  request.method == 'GET':
+        title = request.GET['search']
+        user = request.user
+        category = Category.objects.filter(category__istartswith = title)
+        return render(request, 'dashboard.html',{'category':category,'user':user})
 
 def searchMyIdeas(request,methods=['GET']):
     if  request.method == 'GET':

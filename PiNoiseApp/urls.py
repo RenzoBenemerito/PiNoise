@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^myIdeas/delete$',views.deletePost,name='deletePost'),
     url(r'^login$',views.user_login,name='login'),
     url(r'^dashboard/logout$',views.user_logout,name='logout'),
+    url(r'^searchCategory$',views.searchCategory,name='sCategory'),
     url(r'pPage/(?P<problem>.*)/$',views.problemPage,name='problemPage'),
     url(r'^(?P<problem>.*)/addPost$',views.postIdea,name='postIdea'),
     url(r'^.*/(?P<problem>.*)/search$',views.search,name='search'),

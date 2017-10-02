@@ -7,6 +7,12 @@
         </div>
         <br>
         <div id="categoryPane">
+                <form action="searchCategory" class='form-inline'>
+                    <label for="search">Search: </label>
+                    <input class="form-control" type="text" placeholder="Seach..." id='searchCategory' name='search'>
+                    <button type='submit' class='btn btn-primary'>Search</button>
+                </form>
+            <br>
             <ul class="list">
                 {% for c in category %}
                 <li><a href="pPage/{{c.category}}">{{c.category}}</a></li>

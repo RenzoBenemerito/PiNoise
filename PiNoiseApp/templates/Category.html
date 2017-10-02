@@ -9,13 +9,14 @@
 <div id="categoryPane">
     <div class="postIdeaPane">
         <h3>Have an idea?</h3>
-        <form action='addPost' method="POST" id="post">
+        <form action='addPost' method="POST" enctype="multipart/form-data" id="post">
             {% csrf_token %}
             <label for="title">Title</label>
             <input type="text" name='title'>
             <br>
             <br>
             <textarea name="ideation" id="ideation"></textarea>
+            <input type="file" name='pic'>
             <button class="btn btn-primary" type='submit'>Add Idea</button>
         </form>
     </div>

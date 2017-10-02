@@ -9,6 +9,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from rest_framework.views import APIView
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
@@ -23,7 +24,8 @@ from rest_framework.permissions import (
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.response import Response
 from .serializers import (
-    UsersSerializer,
+    UserCreateSerializer,
+    UserLogInSerializer,
     CategorySerializer,
     PostsSerializer,
     VotesSerializer,
@@ -92,18 +94,6 @@ def problemPage(request,problem):
 
     return render(request,'Category.html',{'problem':problem,'posts':posts,'votes':vote,'userLog':request.user,'user':user})
 
-def postIdea(request,problem,methods=['POST']):
-    if(request.method == 'POST'):
-        title = request.POST['title']
-        description = request.POST['ideation']
-        category = request.POST['category']
-        category1 = Category.objects.get(category=category)
-        poster = request.user
-        username = poster.username
-        post = Posts(author_id = poster,author = username,title = title,description = description,category_id = category1,category = category1.category)
-        post.save()
-    
-        return redirect('./')
 
 def updateIdea(request,titleBefore,methods=['POST']):
     if(request.method == 'POST'):
@@ -392,4 +382,19 @@ class UserCreateView(CreateAPIView):
         password = self.request.POST["password"]
 
         serializer.save(username = username , first_name = first_name, last_name = last_name, email = email, password= password)
+
+class UserLogInView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserLogInSerializer
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = UserLogInSerializer(data = data)
+
+        if serializer.is_valid(raise_exception=True):
+            new_data = serializer.data
+            return Response(new_data, status = HTTP_200_OK)
+        return Resoponse(serializer.errors, status = HTTP_400_BAD_REQUEST)
+
+class VoteCreateView(CreateAPIView):
+    pass
 

@@ -12,7 +12,6 @@ urlpatterns = [
     url(r'^login$',views.user_login,name='login'),
     url(r'^dashboard/logout$',views.user_logout,name='logout'),
     url(r'pPage/(?P<problem>.*)/$',views.problemPage,name='problemPage'),
-    url(r'^(?P<problem>.*)/addPost$',views.postIdea,name='postIdea'),
     url(r'^.*/(?P<problem>.*)/search$',views.search,name='search'),
     url(r'^.*/mySearch$',views.searchMyIdeas,name='searchMyIdeas'),
     url(r'^.*/mySort$',views.mySort,name='mySort'),
@@ -31,7 +30,9 @@ urlpatterns = [
     url(r'^.*/vote$',views.vote,name='vote'),
     url(r'^categories', views.categoryList.as_view()),
     url(r'^(?P<category>.*)/problem-page', views.CategoryListView.as_view()),
-    url(r'^register$', views.UserCreateView.as_view()),
+    url(r'^user_register$', views.UserCreateView.as_view()),
+    url(r'^user_login$', views.UserLogInView.as_view()),
+    url(r'^(?P<category>.*)/problem-page/post$', views.PostCreateView.as_view()),
     ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -16,31 +16,40 @@
         </div>
         <br>
         <div class="postPane">
-            {{post.description}}
-        <br>
-        <br>
-        {% if post.author_id.id == userLog %}
-            <button class='btn btn-primary' id='updatePost'>Update Post</button>
-            <br>
-            <br>
-        {% endif %}
-        <button class='btn btn-danger' data-toggle='modal' data-target='#reportModal'>Report Post</button>
-        {% if user.users.governmentEntity == 1 %}
-        <button class='btn btn-info' data-toggle='modal' data-target='#messageModal'>Message Author</button>
-        {% endif %}
-        <div class="updatePane" style='display:none'>
-            <form action='updatePost' method="POST" class="update">
-                {% csrf_token %}
-                <label for="title">Title</label>
+            {% if post.pic %}
+            <center>
+                <img src="{{post.pic.url}}" alt="" class="postPic">
+            </center>
+            {% endif %}
+            <div class="postDesc">
+                {{post.description}}
                 <br>
-                <input type="text" name='title'>
+            </div>
+            
+            <br>
+            {% if post.author_id.id == userLog %}
+                <button class='btn btn-primary' id='updatePost'>Update Post</button>
                 <br>
-                <textarea name="ideation" id="ideation"></textarea>
-                <div class="bCont">
-                    <button class="btn btn-primary" type='submit'>Update Idea</button>
-                </div>
-            </form> 
-        </div>
+                <br>
+            {% endif %}
+            <button class='btn btn-danger' data-toggle='modal' data-target='#reportModal'>Report Post</button>
+            {% if user.users.governmentEntity == 1 %}
+            <button class='btn btn-info' data-toggle='modal' data-target='#messageModal'>Message Author</button>
+            {% endif %}
+            <div class="updatePane" style='display:none'>
+                <form action='updatePost' method="POST" enctype="multipart/form-data" class="update">
+                    {% csrf_token %}
+                    <label for="title">Title</label>
+                    <br>
+                    <input type="text" name='title'>
+                    <br>
+                    <textarea name="ideation" id="ideation"></textarea>
+                    <input type="file" name='pic'>
+                    <div class="bCont">
+                        <button class="btn btn-primary" type='submit'>Update Idea</button>
+                    </div>
+                </form> 
+            </div>
         <div class="row">
             <h2>Comments</h2>
         </div>
@@ -125,7 +134,7 @@
             </div>
         </div>
         
-        <div>
+        <div class="row">
             <form action='#' id='commentForm'>
                 <textarea type="text" name='comment' class='tarea'></textarea>
                 <br>
