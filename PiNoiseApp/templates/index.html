@@ -69,6 +69,13 @@
     <div class="container-fluid" id="landing">
         <div class="row">
             <div class="col-md-6">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger">
+                    {{message}}
+                </div>
+                {% endfor %}
+                {% endif %}
                 <h1 class="landText">Are you tired of all the 
                 <br>problems in the <br>Philippines?</h1>
             </div>
@@ -84,12 +91,12 @@
         <div class="row">
             <div class="col-md-6">
                 <center>
-                    <button type="button" class="btn btn-modified" data-toggle="modal" data-target="#signUpModal">Sign-Up</button>
+                    <button type="button" class="btn btn-modified buttons" data-toggle="modal" data-target="#signUpModal">Sign-Up</button>
                 </center>        
             </div>
             <div class="col-md-6">
                 <center>
-                    <button class="btn btn-modified" id="login">Log-In</button>
+                    <button class="btn btn-modified buttons" id="login">Log-In</button>
                 </center>        
             </div>
         </div>

@@ -162,4 +162,21 @@ input{
     .retract{
         width: 0;
     }
+    .trans{
+        width: 80%;
+    }
+    #FAQ{
+        height: 170%;
+    }
+    .buttons{
+        width: 90%;
+        margin-top: 5%;
+        margin-top: 5%;
+    }
+    .landText{
+        font-size: 1.5em;
+    }
+    .landText1{
+        font-size: 2em;
+    }
 }

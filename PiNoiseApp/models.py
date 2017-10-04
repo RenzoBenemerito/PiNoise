@@ -8,8 +8,11 @@ class Users(models.Model):
     pic = models.ImageField(upload_to='profile_pic',blank=True)
     governmentEntity = models.IntegerField(blank=True,default=0)
 
-    def __int__(self):
-        return self.user.id
+    def get_user(self):
+        return self.user
+
+    def get_email(self):
+        return self.user.first_name
 
 class Category(models.Model):
     category = models.CharField(max_length=100)

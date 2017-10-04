@@ -45,11 +45,12 @@ def user_login(request,methods=['POST']):
         log = authenticate(username = userLog, password = passLog);
         if log:
             login(request,log)
-            return redirect('/pinoise/dashboard')
+            return redirect('/dashboard')
         else:
-            return messages.error(request, 'No Account with such credentials.')
+            messages.error(request, 'No Account with such credentials.')
+            return redirect('/')
     else:
-        return redirect('/pinoise')
+        return redirect('/')
 
 @login_required
 def user_logout(request):
