@@ -1,4 +1,5 @@
 # PiNoise
+- PiNoise is a online platform where Filipinos can voice out their concerns to the government.
 
 To run the program:
   1) Delete the files in the PiNoiseApp/migrations folder except for the pycache folder and the init file
